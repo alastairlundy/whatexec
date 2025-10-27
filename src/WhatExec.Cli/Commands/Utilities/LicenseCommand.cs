@@ -1,4 +1,4 @@
-namespace WhatExec.Cli.Commands.Utilities;
+namespace AlastairLundy.WhatExec.Cli.Commands.Utilities;
 
 public class LicenseCommand
 {

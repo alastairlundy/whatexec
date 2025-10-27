@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Spectre.Console.Cli;
 
-namespace WhatExec.Cli.Settings;
+namespace AlastairLundy.WhatExec.Cli.Settings;
 
 public class WhichCompatCommandSettings : CommandSettings
 {

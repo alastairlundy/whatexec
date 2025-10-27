@@ -10,13 +10,11 @@
 using System;
 using System.IO;
 using System.Runtime.Versioning;
-
 using AlastairLundy.DotPrimitives.IO.Permissions;
 using AlastairLundy.DotPrimitives.IO.Permissions.Windows;
+using AlastairLundy.WhatExecLib.Abstractions;
 
-using WhatExecLib.Abstractions;
-
-namespace WhatExecLib.Detectors;
+namespace AlastairLundy.WhatExecLib.Detectors;
 
 /// <summary>
 /// Provides functionality to detect whether a file is executable on the current operating system.

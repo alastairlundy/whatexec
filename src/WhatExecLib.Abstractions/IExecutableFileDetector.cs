@@ -1,5 +1,5 @@
 ﻿/*
-    XpWhereLib
+    WhatExec
     Copyright (c) 2024-2025 Alastair Lundy
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -9,7 +9,7 @@
 
 using System.IO;
 
-namespace WhatExecLib.Abstractions;
+namespace AlastairLundy.WhatExecLib.Abstractions;
 
 /// <summary>
 /// Provides an interface for detecting executable files based on their file type and system permissions.

@@ -1,5 +1,5 @@
 ﻿/*
-    XpWhereLib
+    WhatExec
     Copyright (c) 2025 Alastair Lundy
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -11,9 +11,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
-using WhatExecLib.Abstractions;
+using AlastairLundy.WhatExecLib.Abstractions;
 
-namespace WhatExecLib;
+namespace AlastairLundy.WhatExecLib;
 
 /// <summary>
 /// Represents a class that provides functionality to locate instances of executable files

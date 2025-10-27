@@ -1,8 +1,8 @@
 using System.Threading;
+using AlastairLundy.WhatExec.Cli.Settings;
 using Spectre.Console.Cli;
-using WhatExec.Cli.Settings;
 
-namespace WhatExec.Cli.Commands;
+namespace AlastairLundy.WhatExec.Cli.Commands;
 
 public class PrettyWhatExecCommand : Command<XpWhichCommandSettings>
 {

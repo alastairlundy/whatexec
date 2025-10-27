@@ -1,9 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+        <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AssemblyName>AlastairLundy.WhatExecLib</AssemblyName>
+        <RootNamespace>AlastairLundy.WhatExecLib</RootNamespace>
+        <PackageId>AlastairLundy.WhatExecLib</PackageId>
+        <Title>WhatExecLib</Title>
+        <Authors>Alastair Lundy</Authors>
+        <Copyright>Copyright (c) Alastair Lundy</Copyright>
+        <RepositoryUrl>https://github.com/alastairlundy/whatexec</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     </PropertyGroup>
 
     <ItemGroup>

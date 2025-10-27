@@ -1,5 +1,5 @@
 ﻿/*
-    XpWhereLib
+    WhatExec
     Copyright (c) 2025 Alastair Lundy
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -10,7 +10,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace WhatExecLib.Abstractions;
+namespace AlastairLundy.WhatExecLib.Abstractions;
 
 /// <summary>
 /// Defines methods for locating executable file instances across various locations such as drives and directories.

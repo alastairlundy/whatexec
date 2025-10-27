@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using AlastairLundy.WhatExec.Cli.Commands;
+using AlastairLundy.WhatExecLib;
+using AlastairLundy.WhatExecLib.Abstractions;
+using AlastairLundy.WhatExecLib.Detectors;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Extensions.DependencyInjection;
-using WhatExec.Cli.Commands;
-
-using WhatExecLib;
-using WhatExecLib.Abstractions;
-using WhatExecLib.Detectors;
 
 IServiceCollection services = new ServiceCollection();
 

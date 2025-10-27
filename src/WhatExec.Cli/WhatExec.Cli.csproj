@@ -6,6 +6,17 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AssemblyName>whatexec</AssemblyName>
+        <PublishAot>false</PublishAot>
+        <IsAotCompatible>false</IsAotCompatible>
+        <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+        <EnableAotAnalyzer>false</EnableAotAnalyzer>
+        <Title>whatexec</Title>
+        <Authors>Alastair Lundy</Authors>
+        <Copyright>Copyright (c) Alastair Lundy 2025</Copyright>
+        <RepositoryUrl>https://github.com/alastairlundy/whatexec</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <RootNamespace>AlastairLundy.WhatExec.Cli</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

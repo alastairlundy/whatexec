@@ -1,5 +1,5 @@
 ﻿/*
-    XpWhereLib
+    WhatExec
     Copyright (c) 2025 Alastair Lundy
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,10 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
+using AlastairLundy.WhatExecLib.Abstractions;
 
-using WhatExecLib.Abstractions;
-
-namespace WhatExecLib;
+namespace AlastairLundy.WhatExecLib;
 
 /// <summary>
 /// Represents a locator that identifies all executable files within specified directories or drives.
