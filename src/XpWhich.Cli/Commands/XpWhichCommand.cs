@@ -6,7 +6,8 @@ namespace XpWhich.Cli.Commands;
 
 public class XpWhichCommand : Command<XpWhichCommandSettings>
 {
-    public override int Execute(CommandContext context, XpWhichCommandSettings settings, CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, XpWhichCommandSettings settings,
+        CancellationToken cancellationToken)
     {
         throw new System.NotImplementedException();
     }
