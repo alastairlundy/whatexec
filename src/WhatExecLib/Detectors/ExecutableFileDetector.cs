@@ -10,9 +10,11 @@
 using System;
 using System.IO;
 using System.Runtime.Versioning;
+
 using AlastairLundy.DotPrimitives.IO.Permissions;
 using AlastairLundy.DotPrimitives.IO.Permissions.Windows;
-using AlastairLundy.WhatExecLib.Abstractions;
+
+using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 
 namespace AlastairLundy.WhatExecLib.Detectors;
 

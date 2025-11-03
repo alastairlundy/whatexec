@@ -3,7 +3,7 @@ using Spectre.Console.Cli;
 
 namespace AlastairLundy.WhatExec.Cli.Settings;
 
-public class XpWhichCommandSettings : CommandSettings
+public class WhatExecCommandSettings : CommandSettings
 {
     [CommandArgument(0, "<Command(s)>")]
     public string? Commands { get; init; }

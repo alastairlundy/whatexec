@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using AlastairLundy.WhatExec.Cli.Commands;
-using AlastairLundy.WhatExecLib;
-using AlastairLundy.WhatExecLib.Abstractions;
+
+using AlastairLundy.WhatExecLib.Abstractions.Detectors;
+using AlastairLundy.WhatExecLib.Abstractions.Locators;
 using AlastairLundy.WhatExecLib.Detectors;
+using AlastairLundy.WhatExecLib.Locators;
+
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Extensions.DependencyInjection;

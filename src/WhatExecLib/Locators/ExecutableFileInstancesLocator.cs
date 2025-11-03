@@ -1,5 +1,5 @@
 ﻿/*
-    WhatExec
+    WhatExecLib
     Copyright (c) 2025 Alastair Lundy
 
     This Source Code Form is subject to the terms of the Mozilla Public
@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
-using AlastairLundy.WhatExecLib.Abstractions;
 
-namespace AlastairLundy.WhatExecLib;
+using AlastairLundy.WhatExecLib.Abstractions.Detectors;
+using AlastairLundy.WhatExecLib.Abstractions.Locators;
+
+namespace AlastairLundy.WhatExecLib.Locators;
 
 /// <summary>
 /// Represents a class that provides functionality to locate instances of executable files

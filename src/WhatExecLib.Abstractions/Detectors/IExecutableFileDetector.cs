@@ -1,6 +1,6 @@
 ﻿/*
-    WhatExec
-    Copyright (c) 2024-2025 Alastair Lundy
+    WhatExecLib
+    Copyright (c) 2025 Alastair Lundy
 
     This Source Code Form is subject to the terms of the Mozilla Public
     License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,7 @@
 
 using System.IO;
 
-namespace AlastairLundy.WhatExecLib.Abstractions;
+namespace AlastairLundy.WhatExecLib.Abstractions.Detectors;
 
 /// <summary>
 /// Provides an interface for detecting executable files based on their file type and system permissions.
