@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-        <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+        <TargetFrameworks>net8.0;net9.0;netstandard2.0</TargetFrameworks>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>13</LangVersion>
         <AssemblyName>AlastairLundy.WhatExecLib</AssemblyName>
         <RootNamespace>AlastairLundy.WhatExecLib</RootNamespace>
         <PackageId>AlastairLundy.WhatExecLib</PackageId>
@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <PackageReference Include="AlastairLundy.DotPrimitives" Version="3.3.0" />
+        <PackageReference Include="Polyfill" Version="8.9.0" Condition="'$(TargetFramework)' == 'netstandard2.0'"/>
     </ItemGroup>
 
     <ItemGroup>
