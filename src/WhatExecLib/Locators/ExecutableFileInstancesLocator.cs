@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
-
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
 
@@ -42,15 +41,23 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     [SupportedOSPlatform("windows")]
     [SupportedOSPlatform("macos")]
     [SupportedOSPlatform("linux")]
-    public IEnumerable<FileInfo> LocateExecutableInstances(string executableName, SearchOption directorySearchOption)
+    public IEnumerable<FileInfo> LocateExecutableInstances(
+        string executableName,
+        SearchOption directorySearchOption
+    )
     {
-        IEnumerable<DriveInfo> drives = DriveInfo.GetDrives()
-            .Where(x => x.IsReady);
+        IEnumerable<DriveInfo> drives = DriveInfo.GetDrives().Where(x => x.IsReady);
 
-        ParallelQuery<FileInfo> result = drives.AsParallel()
+        ParallelQuery<FileInfo> result = drives
+            .AsParallel()
             .SelectMany(drive =>
-                LocateExecutableInstancesWithinDrive(drive, executableName, SearchOption.AllDirectories));
-    
+                LocateExecutableInstancesWithinDrive(
+                    drive,
+                    executableName,
+                    SearchOption.AllDirectories
+                )
+            );
+
         return result;
     }
 
@@ -61,13 +68,18 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     /// <param name="executableName">The name of the executable file to be located.</param>
     /// <param name="directorySearchOption"></param>
     /// <returns>An array of <see cref="FileInfo"/> objects representing the located executable file instances within the specified drive.</returns>
-    public IEnumerable<FileInfo> LocateExecutableInstancesWithinDrive(DriveInfo driveInfo,
-        string executableName, SearchOption directorySearchOption)
+    public IEnumerable<FileInfo> LocateExecutableInstancesWithinDrive(
+        DriveInfo driveInfo,
+        string executableName,
+        SearchOption directorySearchOption
+    )
     {
-        ParallelQuery<FileInfo> results = driveInfo.RootDirectory
-            .EnumerateDirectories("*", directorySearchOption)
+        ParallelQuery<FileInfo> results = driveInfo
+            .RootDirectory.EnumerateDirectories("*", directorySearchOption)
             .AsParallel()
-            .SelectMany(dir => LocateExecutableInstancesWithinDirectory(dir, executableName,  directorySearchOption));
+            .SelectMany(dir =>
+                LocateExecutableInstancesWithinDirectory(dir, executableName, directorySearchOption)
+            );
 
         return results;
     }
@@ -79,14 +91,20 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     /// <param name="executableName">The name of the executable file to search for.</param>
     /// <param name="directorySearchOption"></param>
     /// <returns>An array of <see cref="FileInfo"/> objects representing the located executable files within the directory.</returns>
-    public IEnumerable<FileInfo> LocateExecutableInstancesWithinDirectory(DirectoryInfo directory,
-        string executableName, SearchOption directorySearchOption)
+    public IEnumerable<FileInfo> LocateExecutableInstancesWithinDirectory(
+        DirectoryInfo directory,
+        string executableName,
+        SearchOption directorySearchOption
+    )
     {
         ParallelQuery<FileInfo> results = directory
             .EnumerateFiles("*", directorySearchOption)
             .AsParallel()
             .Where(file => _executableFileDetector.IsFileExecutable(file))
-            .Where(file => file.Exists && (file.Name.Equals(executableName) || file.FullName.Equals(executableName)));
+            .Where(file =>
+                file.Exists
+                && (file.Name.Equals(executableName) || file.FullName.Equals(executableName))
+            );
 
         return results;
     }

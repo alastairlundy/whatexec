@@ -29,7 +29,7 @@ public interface IExecutableFileDetector
     /// <param name="file">The file to be checked.</param>
     /// <returns>True if the file has execute permissions, false otherwise.</returns>
     bool DoesFileHaveExecutablePermissions(FileInfo file);
-    
+
     /// <summary>
     /// Determines whether a specified file has a valid executable file extension.
     /// </summary>

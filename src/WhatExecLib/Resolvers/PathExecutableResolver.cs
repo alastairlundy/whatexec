@@ -28,16 +28,20 @@ public class PathExecutableResolver : IPathExecutableResolver
     private readonly IExecutableFileDetector _executableFileDetector;
     private bool IsUnix { get; }
     private bool IsWindows { get; }
-    
+
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="executableFileDetector"></param>
     public PathExecutableResolver(IExecutableFileDetector executableFileDetector)
     {
         _executableFileDetector = executableFileDetector;
-        IsUnix = OperatingSystem.IsLinux() || OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst() ||
-                 OperatingSystem.IsFreeBSD() || OperatingSystem.IsAndroid();
+        IsUnix =
+            OperatingSystem.IsLinux()
+            || OperatingSystem.IsMacOS()
+            || OperatingSystem.IsMacCatalyst()
+            || OperatingSystem.IsFreeBSD()
+            || OperatingSystem.IsAndroid();
         IsWindows = OperatingSystem.IsWindows();
     }
 
@@ -52,18 +56,20 @@ public class PathExecutableResolver : IPathExecutableResolver
         else if (IsWindows)
         {
             char pathSeparator = ';';
-            pathExtensions = Environment.GetEnvironmentVariable("PATHEXT")
-                                 ?.Split(pathSeparator, StringSplitOptions.RemoveEmptyEntries)
-                                 .Select(x =>
-                                 {
-                                     x = x.Trim();
-                                     x = x.Trim('"');
-                                     if (x.StartsWith('.') == false)
-                                        x = x.Insert(0, ".");
-                                     
-                                     return x;
-                                 }).ToArray() ?? 
-                             [".COM", ".EXE", ".BAT", ".CMD"];
+            pathExtensions =
+                Environment
+                    .GetEnvironmentVariable("PATHEXT")
+                    ?.Split(pathSeparator, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x =>
+                    {
+                        x = x.Trim();
+                        x = x.Trim('"');
+                        if (x.StartsWith('.') == false)
+                            x = x.Insert(0, ".");
+
+                        return x;
+                    })
+                    .ToArray() ?? [".COM", ".EXE", ".BAT", ".CMD"];
         }
         else
         {
@@ -98,8 +104,9 @@ public class PathExecutableResolver : IPathExecutableResolver
 
         if (pathContents is null)
             throw new InvalidOperationException("PATH Variable could not be found.");
-        
-        return pathContents.Split(pathSeparator, StringSplitOptions.RemoveEmptyEntries)
+
+        return pathContents
+            .Split(pathSeparator, StringSplitOptions.RemoveEmptyEntries)
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .Select(p => p.Trim())
             .Select(p => Environment.ExpandEnvironmentVariables(p))
@@ -107,13 +114,19 @@ public class PathExecutableResolver : IPathExecutableResolver
             {
                 x = x.Trim('"');
                 const string homeToken = "$HOME";
-                string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                string userProfile = Environment.GetFolderPath(
+                    Environment.SpecialFolder.UserProfile
+                );
 
-                int homeTokenIndex = x.IndexOf(homeToken, StringComparison.CurrentCultureIgnoreCase);
-                
+                int homeTokenIndex = x.IndexOf(
+                    homeToken,
+                    StringComparison.CurrentCultureIgnoreCase
+                );
+
                 if (x.StartsWith('~'))
                 {
-                    x = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}{x.Substring(1)}";
+                    x =
+                        $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}{x.Substring(1)}";
                 }
                 if (homeTokenIndex != -1)
                 {
@@ -121,12 +134,12 @@ public class PathExecutableResolver : IPathExecutableResolver
                 }
 
                 x = x.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                
+
                 return x;
             })
             .ToArray();
     }
-    
+
     protected bool ExecutableFileIsValid(string filePath, out FileInfo? fileInfo)
     {
         try
@@ -177,11 +190,11 @@ public class PathExecutableResolver : IPathExecutableResolver
     public FileInfo ResolvePathEnvironmentFile(string inputFilePath)
     {
         bool result = TryResolvePathEnvironmentFile(inputFilePath, out FileInfo? fileInfo);
-        
-        if(result == false || fileInfo is null)
+
+        if (result == false || fileInfo is null)
             throw new FileNotFoundException($"Could not find file: {inputFilePath}");
-        
-        if(File.Exists(fileInfo.FullName) == false)
+
+        if (File.Exists(fileInfo.FullName) == false)
             throw new FileNotFoundException($"Could not find file: {inputFilePath}");
 
         return fileInfo;
@@ -200,8 +213,11 @@ public class PathExecutableResolver : IPathExecutableResolver
         ArgumentException.ThrowIfNullOrEmpty(inputFilePath, nameof(inputFilePath));
 #endif
 
-        if (Path.IsPathRooted(inputFilePath) || inputFilePath.Contains(Path.DirectorySeparatorChar) ||
-            inputFilePath.Contains(Path.AltDirectorySeparatorChar))
+        if (
+            Path.IsPathRooted(inputFilePath)
+            || inputFilePath.Contains(Path.DirectorySeparatorChar)
+            || inputFilePath.Contains(Path.AltDirectorySeparatorChar)
+        )
         {
             if (File.Exists(inputFilePath))
             {
@@ -215,7 +231,7 @@ public class PathExecutableResolver : IPathExecutableResolver
             fileInfo = null;
             return false;
         }
-        
+
         bool fileHasExtension = Path.GetExtension(inputFilePath) != string.Empty;
 
         string[] pathExtensions = GetPathExtensions();
@@ -230,7 +246,7 @@ public class PathExecutableResolver : IPathExecutableResolver
             fileInfo = null;
             return false;
         }
-        
+
         foreach (string pathEntry in pathContents)
         {
             if (fileHasExtension == false)
@@ -238,10 +254,10 @@ public class PathExecutableResolver : IPathExecutableResolver
                 foreach (string pathExtension in pathExtensions)
                 {
                     string filePath = Path.Combine(pathEntry, $"{inputFilePath}{pathExtension}");
-                    
+
                     if (File.Exists(filePath))
                     {
-                        if (ExecutableFileIsValid(filePath, out FileInfo? info)  && info is not null)
+                        if (ExecutableFileIsValid(filePath, out FileInfo? info) && info is not null)
                         {
                             fileInfo = info;
                             return File.Exists(Path.GetFullPath(filePath));
@@ -255,7 +271,7 @@ public class PathExecutableResolver : IPathExecutableResolver
 
                 if (File.Exists(filePath))
                 {
-                    if (ExecutableFileIsValid(filePath, out FileInfo? info)  && info is not null)
+                    if (ExecutableFileIsValid(filePath, out FileInfo? info) && info is not null)
                     {
                         fileInfo = info;
                         return File.Exists(Path.GetFullPath(filePath));
@@ -263,7 +279,7 @@ public class PathExecutableResolver : IPathExecutableResolver
                 }
             }
         }
-        
+
         fileInfo = null;
         return false;
     }

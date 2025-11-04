@@ -6,8 +6,11 @@ namespace AlastairLundy.WhatExec.Cli.Commands;
 
 public class PrettyWhatExecCommand : Command<WhatExecCommandSettings>
 {
-    public override int Execute(CommandContext context, WhatExecCommandSettings settings,
-        CancellationToken cancellationToken)
+    public override int Execute(
+        CommandContext context,
+        WhatExecCommandSettings settings,
+        CancellationToken cancellationToken
+    )
     {
         throw new System.NotImplementedException();
     }

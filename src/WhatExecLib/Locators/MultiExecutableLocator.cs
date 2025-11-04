@@ -43,15 +43,17 @@ public class MultiExecutableLocator : IMultiExecutableLocator
     [SupportedOSPlatform("macos")]
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
-    public IEnumerable<FileInfo> LocateAllExecutablesWithinDirectory(DirectoryInfo directory,
-        SearchOption directorySearchOption)
+    public IEnumerable<FileInfo> LocateAllExecutablesWithinDirectory(
+        DirectoryInfo directory,
+        SearchOption directorySearchOption
+    )
     {
         ParallelQuery<FileInfo> results = directory
             .EnumerateDirectories("*", directorySearchOption)
             .AsParallel()
             .SelectMany(dir =>
             {
-               return dir.EnumerateFiles("*", directorySearchOption)
+                return dir.EnumerateFiles("*", directorySearchOption)
                     .Where(file => _executableFileDetector.IsFileExecutable(file));
             });
 
@@ -68,10 +70,13 @@ public class MultiExecutableLocator : IMultiExecutableLocator
     [SupportedOSPlatform("macos")]
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
-    public IEnumerable<FileInfo> LocateAllExecutablesWithinDrive(DriveInfo driveInfo, SearchOption directorySearchOption)
+    public IEnumerable<FileInfo> LocateAllExecutablesWithinDrive(
+        DriveInfo driveInfo,
+        SearchOption directorySearchOption
+    )
     {
-        ParallelQuery<FileInfo> results = driveInfo.RootDirectory
-            .EnumerateDirectories("*", directorySearchOption)
+        ParallelQuery<FileInfo> results = driveInfo
+            .RootDirectory.EnumerateDirectories("*", directorySearchOption)
             .AsParallel()
             .SelectMany(dir => LocateAllExecutablesWithinDirectory(dir, directorySearchOption));
 

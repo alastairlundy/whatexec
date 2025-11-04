@@ -24,12 +24,14 @@ public class WhatExecutableResolver : IWhatExecutableResolver
     private readonly IExecutableFileInstancesLocator _executableFileInstancesLocator;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="pathExecutableResolver"></param>
     /// <param name="executableFileInstancesLocator"></param>
-    public WhatExecutableResolver(IPathExecutableResolver pathExecutableResolver, 
-        IExecutableFileInstancesLocator  executableFileInstancesLocator)
+    public WhatExecutableResolver(
+        IPathExecutableResolver pathExecutableResolver,
+        IExecutableFileInstancesLocator executableFileInstancesLocator
+    )
     {
         _pathExecutableResolver = pathExecutableResolver;
         _executableFileInstancesLocator = executableFileInstancesLocator;
@@ -45,7 +47,9 @@ public class WhatExecutableResolver : IWhatExecutableResolver
     {
         try
         {
-            FileInfo pathEnvFile = _pathExecutableResolver.ResolvePathEnvironmentFile(inputFilePath);
+            FileInfo pathEnvFile = _pathExecutableResolver.ResolvePathEnvironmentFile(
+                inputFilePath
+            );
 
 #if NETSTANDARD2_0
             if (PathPolyfill.Exists(pathEnvFile.FullName))
@@ -55,17 +59,21 @@ public class WhatExecutableResolver : IWhatExecutableResolver
             {
                 return pathEnvFile;
             }
-            
+
             throw new FileNotFoundException();
         }
         catch
         {
             string fileName = Path.GetFileName(inputFilePath);
-           
-            IEnumerable<FileInfo> results = _executableFileInstancesLocator.LocateExecutableInstances(fileName, SearchOption.TopDirectoryOnly);
+
+            IEnumerable<FileInfo> results =
+                _executableFileInstancesLocator.LocateExecutableInstances(
+                    fileName,
+                    SearchOption.TopDirectoryOnly
+                );
 
             return results.First();
-        } 
+        }
     }
 
     /// <summary>
@@ -76,21 +84,25 @@ public class WhatExecutableResolver : IWhatExecutableResolver
     /// <returns>True if the file path was resolved successfully; otherwise, false.</returns>
     public bool TryResolveExecutableFilePath(string inputFilePath, out FileInfo? fileInfo)
     {
-        bool foundPathResult =
-            _pathExecutableResolver.TryResolvePathEnvironmentFile(inputFilePath, out FileInfo? pathOutput);
+        bool foundPathResult = _pathExecutableResolver.TryResolvePathEnvironmentFile(
+            inputFilePath,
+            out FileInfo? pathOutput
+        );
 
         if (foundPathResult && pathOutput is not null)
         {
             fileInfo = pathOutput;
             return true;
         }
-        
+
         string fileName = Path.GetFileName(inputFilePath);
-           
-        IEnumerable<FileInfo> results = _executableFileInstancesLocator.LocateExecutableInstances(fileName,
-            SearchOption.TopDirectoryOnly);
+
+        IEnumerable<FileInfo> results = _executableFileInstancesLocator.LocateExecutableInstances(
+            fileName,
+            SearchOption.TopDirectoryOnly
+        );
 
         fileInfo = results.FirstOrDefault();
-        return pathOutput is not null; 
+        return pathOutput is not null;
     }
 }

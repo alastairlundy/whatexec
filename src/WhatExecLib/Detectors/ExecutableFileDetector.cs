@@ -9,12 +9,9 @@
 
 using System.IO;
 using System.Runtime.Versioning;
-
 using AlastairLundy.DotPrimitives.IO.Permissions;
 using AlastairLundy.DotPrimitives.IO.Permissions.Windows;
-
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
-
 #if NETSTANDARD2_0
 using OperatingSystem = Polyfills.OperatingSystemPolyfill;
 #else
@@ -45,33 +42,37 @@ public class ExecutableFileDetector : IExecutableFileDetector
     {
         if (File.Exists(file.FullName) == false)
             throw new FileNotFoundException();
-       
+
         if (OperatingSystem.IsWindows())
         {
-            return DoesFileHaveExecutablePermissions(file) &&
-                   DoesFileHaveExecutableExtension(file);
+            return DoesFileHaveExecutablePermissions(file) && DoesFileHaveExecutableExtension(file);
         }
         else if (OperatingSystem.IsLinux())
         {
 #pragma warning disable CA1416
-            return DoesFileHaveExecutablePermissions(file) ||
-                   //   IsUnixElfFile(fullPath) || 
-                   DoesFileHaveExecutableExtension(file);
+            return DoesFileHaveExecutablePermissions(file)
+                ||
+                //   IsUnixElfFile(fullPath) ||
+                DoesFileHaveExecutableExtension(file);
 #pragma warning restore CA1416
         }
 
-        if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst() ||  OperatingSystem.IsFreeBSD())
+        if (
+            OperatingSystem.IsMacOS()
+            || OperatingSystem.IsMacCatalyst()
+            || OperatingSystem.IsFreeBSD()
+        )
         {
 #pragma warning disable CA1416
-            return DoesFileHaveExecutablePermissions(file) ||
-                   //     IsUnixElfFile(file.FullName) || 
-                   //    IsMachOFile(file.FullName) ||
-                   DoesFileHaveExecutableExtension(file);
+            return DoesFileHaveExecutablePermissions(file)
+                ||
+                //     IsUnixElfFile(file.FullName) ||
+                //    IsMachOFile(file.FullName) ||
+                DoesFileHaveExecutableExtension(file);
 #pragma warning restore CA1416
         }
-        
-        return DoesFileHaveExecutablePermissions(file) ||
-               DoesFileHaveExecutableExtension(file);
+
+        return DoesFileHaveExecutablePermissions(file) || DoesFileHaveExecutableExtension(file);
     }
 
     /// <summary>
@@ -91,17 +92,22 @@ public class ExecutableFileDetector : IExecutableFileDetector
     {
         if (File.Exists(file.FullName) == false)
             throw new FileNotFoundException();
-        
+
         if (OperatingSystem.IsWindows())
         {
-            WindowsFilePermission filePermission = WindowsFilePermissionManager.GetFilePermission(file.FullName);
-            
-           return filePermission.HasExecutePermission();
+            WindowsFilePermission filePermission = WindowsFilePermissionManager.GetFilePermission(
+                file.FullName
+            );
+
+            return filePermission.HasExecutePermission();
         }
-        else if (OperatingSystem.IsLinux() ||
-                 OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst()
-                 || OperatingSystem.IsFreeBSD()
-                 || OperatingSystem.IsAndroid())
+        else if (
+            OperatingSystem.IsLinux()
+            || OperatingSystem.IsMacOS()
+            || OperatingSystem.IsMacCatalyst()
+            || OperatingSystem.IsFreeBSD()
+            || OperatingSystem.IsAndroid()
+        )
         {
 #pragma warning disable CA1416
 #if NETSTANDARD2_0
@@ -111,9 +117,9 @@ public class ExecutableFileDetector : IExecutableFileDetector
 #endif
 #pragma warning restore CA1416
 
-            return fileMode.HasFlag(UnixFileMode.OtherExecute) ||
-                   fileMode.HasFlag(UnixFileMode.GroupExecute) ||
-                   fileMode.HasFlag(UnixFileMode.UserExecute);
+            return fileMode.HasFlag(UnixFileMode.OtherExecute)
+                || fileMode.HasFlag(UnixFileMode.GroupExecute)
+                || fileMode.HasFlag(UnixFileMode.UserExecute);
         }
 
         return false;
@@ -136,9 +142,9 @@ public class ExecutableFileDetector : IExecutableFileDetector
     {
         if (File.Exists(file.FullName) == false)
             throw new FileNotFoundException();
-        
+
         bool output = false;
-        
+
         if (OperatingSystem.IsWindows())
         {
             output = file.Extension switch
@@ -150,7 +156,7 @@ public class ExecutableFileDetector : IExecutableFileDetector
                 ".bat" => true,
                 ".cmd" => true,
                 ".jar" => true,
-                _ => false
+                _ => false,
             };
         }
         else if (OperatingSystem.IsLinux())
@@ -172,7 +178,7 @@ public class ExecutableFileDetector : IExecutableFileDetector
                 ".puff" => true,
                 ".jar" => true,
                 ".sh" => true,
-                _ => false
+                _ => false,
             };
         }
         else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
@@ -194,10 +200,10 @@ public class ExecutableFileDetector : IExecutableFileDetector
                 ".puff" => true,
                 ".jar" => true,
                 ".sh" => true,
-                _ => false
+                _ => false,
             };
         }
-        else if(OperatingSystem.IsFreeBSD())
+        else if (OperatingSystem.IsFreeBSD())
         {
             output = file.Extension switch
             {
@@ -214,10 +220,10 @@ public class ExecutableFileDetector : IExecutableFileDetector
                 ".puff" => true,
                 ".jar" => true,
                 ".sh" => true,
-                _ => false
+                _ => false,
             };
         }
-        else if(OperatingSystem.IsAndroid())
+        else if (OperatingSystem.IsAndroid())
         {
             output = file.Extension switch
             {
@@ -235,7 +241,7 @@ public class ExecutableFileDetector : IExecutableFileDetector
                 ".puff" => true,
                 ".jar" => true,
                 ".sh" => true,
-                _ => false
+                _ => false,
             };
         }
         else if (OperatingSystem.IsIOS())
@@ -243,10 +249,10 @@ public class ExecutableFileDetector : IExecutableFileDetector
             output = file.Extension switch
             {
                 ".ipa" => true,
-                _ => false
+                _ => false,
             };
         }
-        
+
         return output;
     }
 }

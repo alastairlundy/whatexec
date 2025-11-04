@@ -25,8 +25,10 @@ public interface IMultiExecutableLocator
     /// <param name="directorySearchOption"></param>
     /// <returns>A collection of <see cref="FileInfo"/> objects representing the executable files within the specified directory.</returns>
     /// <exception cref="DirectoryNotFoundException">Thrown when the specified directory does not exist.</exception>
-    IEnumerable<FileInfo> LocateAllExecutablesWithinDirectory(DirectoryInfo directory,
-        SearchOption directorySearchOption);
+    IEnumerable<FileInfo> LocateAllExecutablesWithinDirectory(
+        DirectoryInfo directory,
+        SearchOption directorySearchOption
+    );
 
     /// <summary>
     /// Locates all executable files within a specified drive asynchronously.
@@ -36,5 +38,8 @@ public interface IMultiExecutableLocator
     /// <param name="searchOption"></param>
     /// <returns>A collection of <see cref="FileInfo"/> objects representing the executable files within the specified drive.</returns>
     /// <exception cref="DriveNotFoundException">Thrown when the specified drive does not exist or is unavailable.</exception>
-    IEnumerable<FileInfo> LocateAllExecutablesWithinDrive(DriveInfo driveInfo, SearchOption searchOption);
+    IEnumerable<FileInfo> LocateAllExecutablesWithinDrive(
+        DriveInfo driveInfo,
+        SearchOption searchOption
+    );
 }

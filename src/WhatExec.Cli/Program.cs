@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using AlastairLundy.WhatExec.Cli.Commands;
-
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
 using AlastairLundy.WhatExecLib.Detectors;
 using AlastairLundy.WhatExecLib.Locators;
-
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Extensions.DependencyInjection;
@@ -27,21 +25,22 @@ app.Configure(config =>
     config.SetApplicationName("xpwhich");
     config.UseAssemblyInformationalVersion();
 
-    Array.ForEach(args, x =>
-    {
-        if (x.ToLower().Contains("pretty"))
-            app.SetDefaultCommand<PrettyWhatExecCommand>();
-        else
+    Array.ForEach(
+        args,
+        x =>
         {
-            app.SetDefaultCommand<WhatExecCommand>();
+            if (x.ToLower().Contains("pretty"))
+                app.SetDefaultCommand<PrettyWhatExecCommand>();
+            else
+            {
+                app.SetDefaultCommand<WhatExecCommand>();
+            }
         }
-    });
+    );
 
     config.AddCommand<PrettyWhatExecCommand>("pretty");
-    
-    config.AddCommand<WhichCompatCommand>("posix")
-        .WithAlias("nix");
-});
 
+    config.AddCommand<WhichCompatCommand>("posix").WithAlias("nix");
+});
 
 return app.Run(args);

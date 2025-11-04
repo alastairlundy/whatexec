@@ -23,7 +23,10 @@ public interface IExecutableFileInstancesLocator
     /// <param name="executableName">The name of the executable file to be located.</param>
     /// <param name="directorySearchOption"></param>
     /// <returns>An array of FileInfo objects representing the located executable file instances.</returns>
-    IEnumerable<FileInfo> LocateExecutableInstances(string executableName, SearchOption directorySearchOption);
+    IEnumerable<FileInfo> LocateExecutableInstances(
+        string executableName,
+        SearchOption directorySearchOption
+    );
 
     /// <summary>
     /// Locates all instances of the specified executable file within a specific drive on the system.
@@ -32,8 +35,11 @@ public interface IExecutableFileInstancesLocator
     /// <param name="executableName">The name of the executable file to be located.</param>
     /// <param name="directorySearchOption"></param>
     /// <returns>An array of FileInfo objects representing the located executable file instances within the specified drive.</returns>
-    IEnumerable<FileInfo> LocateExecutableInstancesWithinDrive(DriveInfo driveInfo,
-        string executableName, SearchOption directorySearchOption);
+    IEnumerable<FileInfo> LocateExecutableInstancesWithinDrive(
+        DriveInfo driveInfo,
+        string executableName,
+        SearchOption directorySearchOption
+    );
 
     /// <summary>
     /// Locates instances of an executable file within the specified directory.
@@ -42,6 +48,9 @@ public interface IExecutableFileInstancesLocator
     /// <param name="executableName">The name of the executable file to search for.</param>
     /// <param name="directorySearchOption"></param>
     /// <returns>An array of FileInfo objects representing the located executable files within the directory.</returns>
-    IEnumerable<FileInfo> LocateExecutableInstancesWithinDirectory(DirectoryInfo directory,
-        string executableName, SearchOption directorySearchOption);
+    IEnumerable<FileInfo> LocateExecutableInstancesWithinDirectory(
+        DirectoryInfo directory,
+        string executableName,
+        SearchOption directorySearchOption
+    );
 }
