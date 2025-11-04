@@ -41,6 +41,8 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     [SupportedOSPlatform("windows")]
     [SupportedOSPlatform("macos")]
     [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public IEnumerable<FileInfo> LocateExecutableInstances(
         string executableName,
         SearchOption directorySearchOption
@@ -68,6 +70,11 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     /// <param name="executableName">The name of the executable file to be located.</param>
     /// <param name="directorySearchOption"></param>
     /// <returns>An array of <see cref="FileInfo"/> objects representing the located executable file instances within the specified drive.</returns>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public IEnumerable<FileInfo> LocateExecutableInstancesWithinDrive(
         DriveInfo driveInfo,
         string executableName,
@@ -91,6 +98,11 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     /// <param name="executableName">The name of the executable file to search for.</param>
     /// <param name="directorySearchOption"></param>
     /// <returns>An array of <see cref="FileInfo"/> objects representing the located executable files within the directory.</returns>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public IEnumerable<FileInfo> LocateExecutableInstancesWithinDirectory(
         DirectoryInfo directory,
         string executableName,

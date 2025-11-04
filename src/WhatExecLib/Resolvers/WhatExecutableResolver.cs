@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using AlastairLundy.WhatExecLib.Abstractions;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
 
@@ -43,6 +44,11 @@ public class WhatExecutableResolver : IWhatExecutableResolver
     /// <param name="inputFilePath">The path or name of the file to resolve. This can be a full path, a relative path, or just the file name.</param>
     /// <returns>The resolved <see cref="FileInfo"/> object representing the full path to the file.</returns>
     /// <exception cref="FileNotFoundException">Thrown when the file could not be resolved or located.</exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public FileInfo ResolveExecutableFilePath(string inputFilePath)
     {
         try
@@ -82,6 +88,11 @@ public class WhatExecutableResolver : IWhatExecutableResolver
     /// <param name="inputFilePath">The path or name of the file to resolve. This can be a full path, a relative path, or just the file name.</param>
     /// <param name="fileInfo">When the method returns, contains the resolved <see cref="FileInfo"/> object representing the file's full path, if the resolution was successful. Otherwise, it is null.</param>
     /// <returns>True if the file path was resolved successfully; otherwise, false.</returns>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public bool TryResolveExecutableFilePath(string inputFilePath, out FileInfo? fileInfo)
     {
         bool foundPathResult = _pathExecutableResolver.TryResolvePathEnvironmentExecutableFile(

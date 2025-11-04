@@ -43,6 +43,7 @@ public class MultiExecutableLocator : IMultiExecutableLocator
     [SupportedOSPlatform("macos")]
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public IEnumerable<FileInfo> LocateAllExecutablesWithinDirectory(
         DirectoryInfo directory,
         SearchOption directorySearchOption
@@ -70,6 +71,7 @@ public class MultiExecutableLocator : IMultiExecutableLocator
     [SupportedOSPlatform("macos")]
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public IEnumerable<FileInfo> LocateAllExecutablesWithinDrive(
         DriveInfo driveInfo,
         SearchOption directorySearchOption

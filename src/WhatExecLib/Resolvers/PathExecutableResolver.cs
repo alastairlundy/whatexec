@@ -10,6 +10,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using AlastairLundy.WhatExecLib.Abstractions;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 #if NETSTANDARD2_0
@@ -187,6 +188,11 @@ public class PathExecutableResolver : IPathExecutableResolver
     /// <exception cref="FileNotFoundException">Thrown if the file could not be found in the specified locations.</exception>
     /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is unsupported.</exception>
     /// <exception cref="InvalidOperationException">Thrown if an invalid operation occurs during file resolution, such as PATH not being able to be resolved.</exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public FileInfo ResolvePathEnvironmentExecutableFile(string inputFilePath)
     {
         bool result = TryResolvePathEnvironmentExecutableFile(
@@ -210,6 +216,11 @@ public class PathExecutableResolver : IPathExecutableResolver
     /// <param name="fileInfo">When this method returns, contains the resolved <see cref="FileInfo"/> object if the resolution is successful; otherwise, null.</param>
     /// <returns>True if the file is successfully resolved; otherwise, false.</returns>
     /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is unsupported.</exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public bool TryResolvePathEnvironmentExecutableFile(
         string inputFilePath,
         out FileInfo? fileInfo
