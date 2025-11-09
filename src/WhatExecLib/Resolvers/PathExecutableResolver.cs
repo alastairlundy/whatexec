@@ -27,8 +27,8 @@ namespace AlastairLundy.WhatExecLib;
 public class PathExecutableResolver : IPathExecutableResolver
 {
     private readonly IExecutableFileDetector _executableFileDetector;
-    private bool IsUnix { get; }
-    private bool IsWindows { get; }
+    protected bool IsUnix { get; }
+    protected bool IsWindows { get; }
 
     /// <summary>
     ///
@@ -46,7 +46,7 @@ public class PathExecutableResolver : IPathExecutableResolver
         IsWindows = OperatingSystem.IsWindows();
     }
 
-    private string[] GetPathExtensions()
+    protected virtual string[] GetPathExtensions()
     {
         string[]? pathExtensions;
 
@@ -82,7 +82,7 @@ public class PathExecutableResolver : IPathExecutableResolver
         return pathExtensions;
     }
 
-    private string[] GetPathContents()
+    protected virtual string[] GetPathContents()
     {
         string? pathContents;
         char pathSeparator;

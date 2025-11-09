@@ -8,6 +8,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "logic", "logic", "{BB3A9684
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatExecLib.Abstractions", "WhatExecLib.Abstractions\WhatExecLib.Abstractions.csproj", "{D3A25A4C-3493-49EF-B6C4-3186BE9B34DB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "extras", "extras", "{28B50084-A8FD-470F-97A8-7FF96DE5A911}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhatExecLib.Extensions.DependencyInjection", "WhatExecLib.Extensions.DependencyInjection\WhatExecLib.Extensions.DependencyInjection.csproj", "{C536E97B-74FF-411E-8344-406137D48CCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

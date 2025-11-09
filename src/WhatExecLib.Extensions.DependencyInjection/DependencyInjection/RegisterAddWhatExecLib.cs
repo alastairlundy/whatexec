@@ -1,0 +1,64 @@
+using AlastairLundy.WhatExecLib;
+using AlastairLundy.WhatExecLib.Abstractions;
+using AlastairLundy.WhatExecLib.Abstractions.Detectors;
+using AlastairLundy.WhatExecLib.Abstractions.Locators;
+using AlastairLundy.WhatExecLib.Detectors;
+using AlastairLundy.WhatExecLib.Locators;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
+namespace WhatExecLib.Extensions.DependencyInjection.DependencyInjection;
+
+/// <summary>
+///
+/// </summary>
+public static class RegisterAddWhatExecLib
+{
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="serviceLifetime"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddWhatExecLib(
+        this IServiceCollection services,
+        ServiceLifetime serviceLifetime
+    )
+    {
+        switch (serviceLifetime)
+        {
+            case ServiceLifetime.Scoped:
+                services.AddScoped<IExecutableFileDetector, ExecutableFileDetector>();
+                services.AddScoped<
+                    IExecutableFileInstancesLocator,
+                    ExecutableFileInstancesLocator
+                >();
+                services.AddScoped<IMultiExecutableLocator, MultiExecutableLocator>();
+                services.TryAddScoped<IPathExecutableResolver, PathExecutableResolver>();
+                services.AddScoped<IWhatExecutableResolver, WhatExecutableResolver>();
+                break;
+            case ServiceLifetime.Singleton:
+                services.AddSingleton<IExecutableFileDetector, ExecutableFileDetector>();
+                services.AddSingleton<
+                    IExecutableFileInstancesLocator,
+                    ExecutableFileInstancesLocator
+                >();
+                services.AddSingleton<IMultiExecutableLocator, MultiExecutableLocator>();
+                services.TryAddSingleton<IPathExecutableResolver, PathExecutableResolver>();
+                services.AddSingleton<IWhatExecutableResolver, WhatExecutableResolver>();
+                break;
+            case ServiceLifetime.Transient:
+                services.AddTransient<IExecutableFileDetector, ExecutableFileDetector>();
+                services.AddTransient<
+                    IExecutableFileInstancesLocator,
+                    ExecutableFileInstancesLocator
+                >();
+                services.AddTransient<IMultiExecutableLocator, MultiExecutableLocator>();
+                services.TryAddTransient<IPathExecutableResolver, PathExecutableResolver>();
+                services.AddTransient<IWhatExecutableResolver, WhatExecutableResolver>();
+                break;
+        }
+
+        return services;
+    }
+}
