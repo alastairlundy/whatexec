@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Cli.Extensions.DependencyInjection;
-using WhatExecLib.Extensions.DependencyInjection.DependencyInjection;
+using WhatExecLib.Extensions.DependencyInjection;
 
 IServiceCollection services = new ServiceCollection();
 

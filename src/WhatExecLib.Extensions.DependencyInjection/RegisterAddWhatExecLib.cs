@@ -1,3 +1,12 @@
+/*
+    WhatExecLib
+    Copyright (c) 2025 Alastair Lundy
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 using AlastairLundy.WhatExecLib;
 using AlastairLundy.WhatExecLib.Abstractions;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
@@ -7,7 +16,7 @@ using AlastairLundy.WhatExecLib.Locators;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace WhatExecLib.Extensions.DependencyInjection.DependencyInjection;
+namespace WhatExecLib.Extensions.DependencyInjection;
 
 /// <summary>
 ///
