@@ -1,3 +1,12 @@
+/*
+    WhatExecLib
+    Copyright (c) 2025 Alastair Lundy
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 using System;
 using AlastairLundy.WhatExecLib.Abstractions;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
@@ -30,32 +39,19 @@ public static class DependencyInjectionExtensions
         switch (serviceLifetime)
         {
             case ServiceLifetime.Scoped:
-                services.AddScoped<IPathExecutableResolver>(sp => new CachedPathExecutableResolver(
-                    sp.GetRequiredService<IExecutableFileDetector>(),
-                    sp.GetRequiredService<IMemoryCache>(),
-                    pathCacheLifespan,
-                    pathExtensionsCacheLifespan
-                ));
+                services.AddScoped<ICachedPathExecutableResolver, CachedPathExecutableResolver>();
                 break;
             case ServiceLifetime.Singleton:
-                services.AddSingleton<IPathExecutableResolver>(
-                    sp => new CachedPathExecutableResolver(
-                        sp.GetRequiredService<IExecutableFileDetector>(),
-                        sp.GetRequiredService<IMemoryCache>(),
-                        pathCacheLifespan,
-                        pathExtensionsCacheLifespan
-                    )
-                );
+                services.AddSingleton<
+                    ICachedPathExecutableResolver,
+                    CachedPathExecutableResolver
+                >();
                 break;
             case ServiceLifetime.Transient:
-                services.AddTransient<IPathExecutableResolver>(
-                    sp => new CachedPathExecutableResolver(
-                        sp.GetRequiredService<IExecutableFileDetector>(),
-                        sp.GetRequiredService<IMemoryCache>(),
-                        pathCacheLifespan,
-                        pathExtensionsCacheLifespan
-                    )
-                );
+                services.AddTransient<
+                    ICachedPathExecutableResolver,
+                    CachedPathExecutableResolver
+                >();
                 break;
         }
 

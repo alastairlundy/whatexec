@@ -1,6 +1,15 @@
+/*
+    WhatExecLib
+    Copyright (c) 2025 Alastair Lundy
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 using System;
+using System.IO;
 using AlastairLundy.WhatExecLib;
-using AlastairLundy.WhatExecLib.Abstractions;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -9,38 +18,28 @@ namespace WhatExecLib.Caching.Resolvers;
 /// <summary>
 ///
 /// </summary>
-public class CachedPathExecutableResolver : PathExecutableResolver, IPathExecutableResolver
+public class CachedPathExecutableResolver : PathExecutableResolver, ICachedPathExecutableResolver
 {
     private readonly IMemoryCache _cache;
 
     private const string PathExtensionCacheName = "PathExtensionCacheData";
     private const string PathCacheName = "PathCacheData";
 
-    private TimeSpan PathCacheLifespan { get; set; } = TimeSpan.FromMinutes(5);
-    private TimeSpan PathExtensionsCacheLifespan { get; set; } = TimeSpan.FromHours(6);
+    private TimeSpan DefaultPathCacheLifespan { get; set; } = TimeSpan.FromMinutes(5);
+    private TimeSpan DefaultPathExtensionsCacheLifespan { get; set; } = TimeSpan.FromMinutes(5);
 
     /// <summary>
     ///
     /// </summary>
     /// <param name="executableFileDetector"></param>
     /// <param name="cache"></param>
-    /// <param name="pathCacheLifespan"></param>
-    /// <param name="pathExtensionsCacheLifespan"></param>
     public CachedPathExecutableResolver(
         IExecutableFileDetector executableFileDetector,
-        IMemoryCache cache,
-        TimeSpan? pathCacheLifespan = null,
-        TimeSpan? pathExtensionsCacheLifespan = null
+        IMemoryCache cache
     )
         : base(executableFileDetector)
     {
         _cache = cache;
-
-        if (pathCacheLifespan.HasValue)
-            PathCacheLifespan = pathCacheLifespan.Value;
-
-        if (pathExtensionsCacheLifespan.HasValue)
-            PathExtensionsCacheLifespan = pathExtensionsCacheLifespan.Value;
     }
 
     protected override string[] GetPathContents()
@@ -51,7 +50,7 @@ public class CachedPathExecutableResolver : PathExecutableResolver, IPathExecuta
         {
             pathContents = base.GetPathContents();
 
-            _cache.Set(PathCacheName, pathContents, PathCacheLifespan);
+            _cache.Set(PathCacheName, pathContents, DefaultPathCacheLifespan);
         }
 
         return pathContents;
@@ -65,9 +64,35 @@ public class CachedPathExecutableResolver : PathExecutableResolver, IPathExecuta
         {
             pathContentsExtensions = base.GetPathExtensions();
 
-            _cache.Set(PathExtensionCacheName, pathContentsExtensions, PathExtensionsCacheLifespan);
+            _cache.Set(
+                PathExtensionCacheName,
+                pathContentsExtensions,
+                DefaultPathExtensionsCacheLifespan
+            );
         }
 
         return pathContentsExtensions;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="inputFilePath"></param>
+    /// <param name="pathExtensionsCacheLifetime"></param>
+    /// <param name="pathCacheLifetime"></param>
+    /// <returns></returns>
+    public FileInfo ResolvePathEnvironmentExecutableFile(
+        string inputFilePath,
+        TimeSpan? pathExtensionsCacheLifetime,
+        TimeSpan? pathCacheLifetime
+    )
+    {
+        if (pathCacheLifetime is not null)
+            DefaultPathCacheLifespan = pathCacheLifetime.Value;
+
+        if (pathExtensionsCacheLifetime is not null)
+            DefaultPathExtensionsCacheLifespan = pathExtensionsCacheLifetime.Value;
+
+        return ResolvePathEnvironmentExecutableFile(inputFilePath);
     }
 }
