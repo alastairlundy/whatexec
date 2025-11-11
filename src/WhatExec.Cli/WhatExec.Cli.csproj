@@ -18,9 +18,7 @@
     <RootNamespace>AlastairLundy.WhatExec.Cli</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.53.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.53.0" />
     <PackageReference
       Include="Spectre.Console.Cli.Extensions.DependencyInjection"
