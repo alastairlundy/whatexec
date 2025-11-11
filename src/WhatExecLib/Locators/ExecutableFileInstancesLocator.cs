@@ -53,11 +53,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
         ParallelQuery<FileInfo> result = drives
             .AsParallel()
             .SelectMany(drive =>
-                LocateExecutableInstancesWithinDrive(
-                    drive,
-                    executableName,
-                    SearchOption.AllDirectories
-                )
+                LocateExecutableInstancesWithinDrive(drive, executableName, directorySearchOption)
             );
 
         return result;
