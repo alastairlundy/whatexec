@@ -1,13 +1,16 @@
 # WhatExec
 
 ## Description
+WhatExecLib is a C# library that finds executable files in PATH Environment Variables, Directories or Drives.
+
+
 ## Features
 ## Installation Instructions
 
 To install the package, run:
 
 ```bash
-dotnet add package AlastairLundy.WhatExecLib.Abstractions
+dotnet add package AlastairLundy.WhatExecLibs
 ```
 
 ## Contributing
