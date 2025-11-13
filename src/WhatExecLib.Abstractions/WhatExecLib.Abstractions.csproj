@@ -13,10 +13,22 @@
     <Copyright>Copyright (c) Alastair Lundy 2025</Copyright>
     <RepositoryUrl>https://github.com/alastairlundy/whatexec</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Version>1.0.0-preview.1</Version>
     <Description>This is an abstractions-only library that provides interfaces for resolving Executable File locations.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="README.md">
+      <Link>README.md</Link>
+      <PackagePath>README.md</PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

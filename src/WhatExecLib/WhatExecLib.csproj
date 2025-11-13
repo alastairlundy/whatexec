@@ -12,6 +12,10 @@
     <Copyright>Copyright (c) Alastair Lundy</Copyright>
     <RepositoryUrl>https://github.com/alastairlundy/whatexec</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -27,6 +31,13 @@
       Condition="'$(TargetFramework)' == 'netstandard2.0'"
       PrivateAssets="all"
     />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="README.md">
+      <Link>README.md</Link>
+      <PackagePath>README.md</PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WhatExecLib.Abstractions\WhatExecLib.Abstractions.csproj" />
