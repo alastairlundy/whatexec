@@ -22,6 +22,7 @@
     <Version>1.0.0-preview.1</Version>
     <Description>WhatExecLib is a C# library that finds executable files in PATH Environment Variables, Directories or Drives.
 </Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AlastairLundy.DotPrimitives" Version="4.0.0-preview.1" />
@@ -40,6 +41,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WhatExecLib.Abstractions\WhatExecLib.Abstractions.csproj" />
+    <PackageReference Include="AlastairLundy.WhatExecLib.Abstractions" Version="1.0.0-preview.1" />
   </ItemGroup>
 </Project>
