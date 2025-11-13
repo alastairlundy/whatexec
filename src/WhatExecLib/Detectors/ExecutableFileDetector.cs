@@ -7,16 +7,12 @@
     file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+using System;
 using System.IO;
 using System.Runtime.Versioning;
 using AlastairLundy.DotPrimitives.IO.Permissions;
 using AlastairLundy.DotPrimitives.IO.Permissions.Windows;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
-#if NETSTANDARD2_0
-using OperatingSystem = Polyfills.OperatingSystemPolyfill;
-#else
-using System;
-#endif
 
 namespace AlastairLundy.WhatExecLib.Detectors;
 
@@ -110,11 +106,7 @@ public class ExecutableFileDetector : IExecutableFileDetector
         )
         {
 #pragma warning disable CA1416
-#if NETSTANDARD2_0
-            UnixFileMode fileMode = FilePolyfill.GetUnixFileMode(file.FullName);
-#else
             UnixFileMode fileMode = File.GetUnixFileMode(file.FullName);
-#endif
 #pragma warning restore CA1416
 
             return fileMode.HasFlag(UnixFileMode.OtherExecute)

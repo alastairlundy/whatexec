@@ -13,9 +13,6 @@ using System.Linq;
 using System.Runtime.Versioning;
 using AlastairLundy.WhatExecLib.Abstractions;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
-#if NETSTANDARD2_0
-using OperatingSystem = Polyfills.OperatingSystemPolyfill;
-#endif
 
 // ReSharper disable ConvertClosureToMethodGroup
 

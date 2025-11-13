@@ -57,11 +57,7 @@ public class WhatExecutableResolver : IWhatExecutableResolver
                 inputFilePath
             );
 
-#if NETSTANDARD2_0
-            if (PathPolyfill.Exists(pathEnvFile.FullName))
-#else
             if (Path.Exists(pathEnvFile.FullName))
-#endif
             {
                 return pathEnvFile;
             }
