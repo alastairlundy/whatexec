@@ -53,7 +53,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
         ParallelQuery<FileInfo> result = drives
             .AsParallel()
             .SelectMany(drive =>
-                LocateExecutableInstancesWithinDrive(drive, executableName, directorySearchOption)
+                LocateExecutableInstancesInDrive(drive, executableName, directorySearchOption)
             );
 
         return result;
@@ -71,7 +71,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public IEnumerable<FileInfo> LocateExecutableInstancesWithinDrive(
+    public IEnumerable<FileInfo> LocateExecutableInstancesInDrive(
         DriveInfo driveInfo,
         string executableName,
         SearchOption directorySearchOption
@@ -81,7 +81,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
             .RootDirectory.EnumerateDirectories("*", directorySearchOption)
             .AsParallel()
             .SelectMany(dir =>
-                LocateExecutableInstancesWithinDirectory(dir, executableName, directorySearchOption)
+                LocateExecutableInstancesInDirectory(dir, executableName, directorySearchOption)
             );
 
         return results;
@@ -99,7 +99,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public IEnumerable<FileInfo> LocateExecutableInstancesWithinDirectory(
+    public IEnumerable<FileInfo> LocateExecutableInstancesInDirectory(
         DirectoryInfo directory,
         string executableName,
         SearchOption directorySearchOption
