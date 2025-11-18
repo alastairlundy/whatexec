@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using AlastairLundy.DotPrimitives.IO.Paths;
 using AlastairLundy.WhatExecLib;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using Microsoft.Extensions.Caching.Memory;
@@ -42,13 +43,13 @@ public class CachedPathExecutableResolver : PathExecutableResolver, ICachedPathE
         _cache = cache;
     }
 
-    protected override string[] GetPathContents()
+    protected string[]? GetPathContents()
     {
         string[]? pathContents = _cache.Get<string[]>(PathCacheName);
 
         if (pathContents is null)
         {
-            pathContents = base.GetPathContents();
+            pathContents = PathVariable.GetContents();
 
             _cache.Set(PathCacheName, pathContents, DefaultPathCacheLifespan);
         }
@@ -56,13 +57,13 @@ public class CachedPathExecutableResolver : PathExecutableResolver, ICachedPathE
         return pathContents;
     }
 
-    protected override string[] GetPathExtensions()
+    protected string[] GetPathExtensions()
     {
         string[]? pathContentsExtensions = _cache.Get<string[]>(PathExtensionCacheName);
 
         if (pathContentsExtensions is null)
         {
-            pathContentsExtensions = base.GetPathExtensions();
+            pathContentsExtensions = PathVariable.GetPathFileExtensions();
 
             _cache.Set(
                 PathExtensionCacheName,
