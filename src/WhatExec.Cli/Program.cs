@@ -36,11 +36,11 @@ app.Configure(config =>
         {
             conf.AddCommand<PathOnlySearchCommand>("path");
 
-            conf.AddCommand<DirectoryOnlySearchCommand>("directory").WithAlias("dir");
+            /*conf.AddCommand<DirectoryOnlySearchCommand>("directory").WithAlias("dir");
 
             conf.AddCommand<DriveOnlySearchCommand>("drive");
 
-            conf.AddCommand<GlobalSearchCommand>("system");
+            conf.AddCommand<GlobalSearchCommand>("system");*/
         }
     );
 });
