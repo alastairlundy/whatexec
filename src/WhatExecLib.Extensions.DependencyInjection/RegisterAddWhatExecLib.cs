@@ -7,7 +7,6 @@
     file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-using AlastairLundy.WhatExecLib;
 using AlastairLundy.WhatExecLib.Abstractions;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
@@ -16,7 +15,7 @@ using AlastairLundy.WhatExecLib.Locators;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace WhatExecLib.Extensions.DependencyInjection;
+namespace AlastairLundy.WhatExecLib.Extensions.DependencyInjection;
 
 /// <summary>
 ///
