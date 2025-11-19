@@ -9,7 +9,6 @@
 
 using System.Globalization;
 using AlastairLundy.WhatExec.Cli.Commands;
-using AlastairLundy.WhatExec.Cli.Commands.SingleSearch;
 using AlastairLundy.WhatExecLib.Caching.Extensions;
 using AlastairLundy.WhatExecLib.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;

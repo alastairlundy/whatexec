@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace AlastairLundy.WhatExec.Cli.Settings;
 
 public abstract class SingleSearchBaseCommandSettings : CommandSettings

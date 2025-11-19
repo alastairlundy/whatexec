@@ -5,6 +5,7 @@ global using System.Collections.Generic;
 global using System.ComponentModel;
 global using System.IO;
 global using System.Threading;
+global using AlastairLundy.WhatExec.Cli.Commands.SingleSearch;
 global using AlastairLundy.WhatExec.Cli.Helpers;
 global using AlastairLundy.WhatExec.Cli.Localizations;
 global using AlastairLundy.WhatExec.Cli.Settings;
