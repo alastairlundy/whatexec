@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using AlastairLundy.WhatExec.Cli.Localizations;
-using AlastairLundy.WhatExec.Cli.Localizations;
-using AlastairLundy.WhatExec.Cli.Localizations;
-using Spectre.Console;
 
 namespace AlastairLundy.WhatExec.Cli.Helpers;
 
