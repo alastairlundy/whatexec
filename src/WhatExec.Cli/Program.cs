@@ -16,7 +16,9 @@ using Spectre.Console.Cli.Extensions.DependencyInjection;
 
 IServiceCollection services = new ServiceCollection();
 
+services.AddMemoryCache();
 services.AddWhatExecLib(ServiceLifetime.Scoped);
+services.AddWhatExecLibCaching(ServiceLifetime.Scoped);
 
 using DependencyInjectionRegistrar registrar = new DependencyInjectionRegistrar(services);
 CommandApp app = new CommandApp(registrar);
