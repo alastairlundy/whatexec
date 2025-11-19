@@ -100,10 +100,9 @@ public class PathExecutableResolver : IPathExecutableResolver
             out FileInfo? fileInfo
         );
 
-        if (result == false || fileInfo is null)
-            throw new FileNotFoundException($"Could not find file: {inputFilePath}");
+        bool fileDoesntExist = !File.Exists(fileInfo?.FullName);
 
-        if (File.Exists(fileInfo.FullName) == false)
+        if (result == false || fileInfo is null || fileDoesntExist)
             throw new FileNotFoundException($"Could not find file: {inputFilePath}");
 
         return fileInfo;

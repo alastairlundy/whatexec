@@ -6,9 +6,9 @@
     <Nullable>enable</Nullable>
     <AssemblyName>whatexec</AssemblyName>
     <PublishAot>false</PublishAot>
+    <PublishTrimmed>false</PublishTrimmed>
     <IsAotCompatible>false</IsAotCompatible>
     <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
-    <EnableAotAnalyzer>false</EnableAotAnalyzer>
     <Title>whatexec</Title>
     <Authors>Alastair Lundy</Authors>
     <Copyright>Copyright (c) Alastair Lundy 2025</Copyright>
@@ -16,14 +16,12 @@
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RootNamespace>AlastairLundy.WhatExec.Cli</RootNamespace>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Spectre.Console" Version="0.54.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="1.0.0-alpha.0.7" />
-    <PackageReference
-      Include="Spectre.Console.Cli.Extensions.DependencyInjection"
-      Version="0.17.1-preview.0.1"
-    />
+    <PackageReference Include="Spectre.Console.Cli.Extensions.DependencyInjection" Version="0.17.1-preview.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WhatExecLib.Abstractions\WhatExecLib.Abstractions.csproj" />
