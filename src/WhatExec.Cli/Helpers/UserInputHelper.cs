@@ -46,32 +46,48 @@ internal static class UserInputHelper
         return drive;
     }
 
-    internal static string GetFileInput()
+    internal static string[] GetCommandInput()
     {
-        string file = AnsiConsole.Prompt(
-            new TextPrompt<string>(Resources.Prompts_TextInput_File, StringComparer.CurrentCulture)
-                .InvalidChoiceMessage("")
-                .Validate(s =>
-                {
-                    if (string.IsNullOrWhiteSpace(s) || string.IsNullOrEmpty(s))
-                        return ValidationResult.Error(
-                            Resources.ValidationErrors_File_EmptyOrWhitespace
-                        );
+        bool keepAddingCommands = false;
 
-                    if (
-                        s.Contains(Path.DirectorySeparatorChar)
-                        || s.Contains(Path.AltDirectorySeparatorChar)
-                    )
+        List<string> commands = new();
+
+        do
+        {
+            string command = AnsiConsole.Prompt(
+                new TextPrompt<string>(
+                    Resources.Prompts_TextInput_File,
+                    StringComparer.CurrentCulture
+                )
+                    .InvalidChoiceMessage("")
+                    .Validate(s =>
                     {
-                        return ValidationResult.Error(
-                            Resources.ValidationErrors_File_CannotContainDirectorySeparator
-                        );
-                    }
+                        if (string.IsNullOrWhiteSpace(s) || string.IsNullOrEmpty(s))
+                            return ValidationResult.Error(
+                                Resources.ValidationErrors_File_EmptyOrWhitespace
+                            );
 
-                    return ValidationResult.Success();
-                })
-        );
+                        if (
+                            s.Contains(Path.DirectorySeparatorChar)
+                            || s.Contains(Path.AltDirectorySeparatorChar)
+                        )
+                        {
+                            return ValidationResult.Error(
+                                Resources.ValidationErrors_File_CannotContainDirectorySeparator
+                            );
+                        }
 
-        return file;
+                        return ValidationResult.Success();
+                    })
+            );
+
+            commands.Add(command);
+            
+            keepAddingCommands = AnsiConsole.Prompt(
+                new ConfirmationPrompt(""))
+            
+        } while (keepAddingCommands);
+
+        return commands.ToArray();
     }
 }
