@@ -15,13 +15,12 @@
     <RepositoryUrl>https://github.com/alastairlundy/whatexec</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <RootNamespace>AlastairLundy.WhatExec.Cli</RootNamespace>
+    <RootNamespace>AlastairLundy.WhatExecCli</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="DotMake.CommandLine" Version="3.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.54.0" />
-    <PackageReference Include="Spectre.Console.Cli" Version="1.0.0-alpha.0.7" />
-    <PackageReference Include="Spectre.Console.Cli.Extensions.DependencyInjection" Version="0.17.1-preview.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WhatExecLib.Abstractions\WhatExecLib.Abstractions.csproj" />
@@ -44,5 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Commands\MultiSearch\" />
+    <Folder Include="Settings\" />
   </ItemGroup>
 </Project>
