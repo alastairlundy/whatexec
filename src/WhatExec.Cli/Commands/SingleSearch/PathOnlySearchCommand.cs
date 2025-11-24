@@ -1,9 +1,11 @@
 using System.Diagnostics;
-using System.Threading.Tasks;
+using DotMake.CommandLine;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace AlastairLundy.WhatExec.Cli.Commands.SingleSearch;
 
-public class PathOnlySearchCommand : AsyncCommand<PathOnlySearchCommand.Settings>
+public class PathOnlySearchCommand
 {
     private readonly IPathExecutableResolver _pathExecutableResolver;
     private readonly ICachedPathExecutableResolver _cachedPathExecutableResolver;
@@ -17,15 +19,16 @@ public class PathOnlySearchCommand : AsyncCommand<PathOnlySearchCommand.Settings
         _cachedPathExecutableResolver = cachedPathExecutableResolver;
     }
 
-    public class Settings : SingleSearchBaseCommandSettings { }
+    [CliArgument(Name = "<Commands>", Description = "The commands to resolve the file path of.")]
+    public string[]? Commands { get; set; }
 
-    protected override async Task<int> ExecuteAsync(
-        CommandContext context,
-        Settings settings,
-        CancellationToken cancellationToken
-    )
+    [CliOption(Name = "--use-caching")]
+    [DefaultValue(true)]
+    public bool UseCaching { get; set; }
+
+    public async Task<int> RunAsync()
     {
-        string[] commands = settings.Commands ?? UserInputHelper.GetCommandInput();
+        string[] commands = Commands ?? UserInputHelper.GetCommandInput();
 
         try
         {
@@ -41,7 +44,7 @@ public class PathOnlySearchCommand : AsyncCommand<PathOnlySearchCommand.Settings
                     bool found;
                     FileInfo? info;
 
-                    if (settings.UseCaching)
+                    if (UseCaching)
                     {
                         found =
                             _cachedPathExecutableResolver.TryResolvePathEnvironmentExecutableFile(
@@ -72,10 +75,7 @@ public class PathOnlySearchCommand : AsyncCommand<PathOnlySearchCommand.Settings
                 return output;
             }
 
-            Task<IList<FileInfo>> resolverTask = Task.Run(
-                () => ResolveCommands(),
-                cancellationToken
-            );
+            Task<IList<FileInfo>> resolverTask = Task.Run(() => ResolveCommands());
 
             IList<FileInfo> resolvedCommands = await resolverTask;
 
@@ -86,11 +86,7 @@ public class PathOnlySearchCommand : AsyncCommand<PathOnlySearchCommand.Settings
         }
         catch (Exception e)
         {
-            ExceptionFormats formats = settings.ShowErrorsAndBeVerbose
-                ? ExceptionFormats.Default
-                : ExceptionFormats.ShortenEverything;
-
-            AnsiConsole.WriteException(e, formats);
+            AnsiConsole.WriteException(e);
             return 1;
         }
 
