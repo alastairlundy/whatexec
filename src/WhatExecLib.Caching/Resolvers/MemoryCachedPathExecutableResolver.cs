@@ -63,7 +63,7 @@ public class MemoryCachedPathExecutableResolver
 
         if (pathContents is null)
         {
-            pathContents = PathVariable.GetContents();
+            pathContents = PathEnvironmentVariable.GetDirectories();
 
             _cache.Set(PathCacheName, pathContents, pathCacheLifespan);
         }
@@ -77,7 +77,7 @@ public class MemoryCachedPathExecutableResolver
 
         if (pathContentsExtensions is null)
         {
-            pathContentsExtensions = PathVariable.GetPathFileExtensions();
+            pathContentsExtensions = PathEnvironmentVariable.GetPathFileExtensions();
 
             _cache.Set(PathExtensionCacheName, pathContentsExtensions, pathExtensionsCacheLifespan);
         }

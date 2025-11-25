@@ -150,13 +150,13 @@ public class PathExecutableResolver : IPathExecutableResolver
 
         bool fileHasExtension = Path.GetExtension(inputFilePath) != string.Empty;
 
-        string[] pathExtensions = PathVariable.GetPathFileExtensions();
+        string[] pathExtensions = PathEnvironmentVariable.GetPathFileExtensions();
         string[] pathContents;
 
         try
         {
             pathContents =
-                PathVariable.GetContents()
+                PathEnvironmentVariable.GetDirectories()
                 ?? throw new InvalidOperationException("PATH Variable could not be found.");
         }
         catch (InvalidOperationException)
