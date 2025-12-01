@@ -20,9 +20,11 @@ namespace AlastairLundy.WhatExecLib.Detectors;
 /// </summary>
 public class ExecutableFileDetector : IExecutableFileDetector
 {
-    private bool IsUnix { get; set; }
+    private bool IsUnix { get; init; }
 
-    private bool IsBsdBased { get; set; }
+    private bool IsMac { get; init; }
+
+    private bool IsBsdBased { get; init; }
 
     /// <summary>
     ///
@@ -30,17 +32,15 @@ public class ExecutableFileDetector : IExecutableFileDetector
     /// <exception cref="PlatformNotSupportedException"></exception>
     public ExecutableFileDetector()
     {
+        IsMac = OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst();
+
         IsUnix =
             OperatingSystem.IsLinux()
-            || OperatingSystem.IsMacOS()
-            || OperatingSystem.IsMacCatalyst()
+            || IsMac
             || OperatingSystem.IsFreeBSD()
             || OperatingSystem.IsAndroid();
 
-        IsBsdBased =
-            OperatingSystem.IsMacOS()
-            || OperatingSystem.IsMacCatalyst()
-            || OperatingSystem.IsFreeBSD();
+        IsBsdBased = IsMac || OperatingSystem.IsFreeBSD();
 
         if (OperatingSystem.IsBrowser() || OperatingSystem.IsTvOS() || OperatingSystem.IsIOS())
             throw new PlatformNotSupportedException();
