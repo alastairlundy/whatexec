@@ -56,14 +56,6 @@ public class PathOnlySearchCommand : AsyncCommand<PathOnlySearchCommand.Settings
 
                     if (found && info is not null)
                         output.Add(info);
-
-                    stopwatch.Stop();
-                    Console.WriteLine(
-                        "Took {0}ms to resolve {1}",
-                        stopwatch.Elapsed.TotalMilliseconds,
-                        command
-                    );
-                    stopwatch.Reset();
                 }
 
                 return output;
