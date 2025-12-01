@@ -7,6 +7,7 @@
     file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,6 +49,8 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
         SearchOption directorySearchOption
     )
     {
+        ArgumentException.ThrowIfNullOrEmpty(executableName);
+
         IEnumerable<DriveInfo> drives = DriveInfo.GetDrives().Where(x => x.IsReady);
 
         ParallelQuery<FileInfo> result = drives
@@ -77,6 +80,8 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
         SearchOption directorySearchOption
     )
     {
+        ArgumentException.ThrowIfNullOrEmpty(executableName);
+
         ParallelQuery<FileInfo> results = driveInfo
             .RootDirectory.EnumerateDirectories("*", directorySearchOption)
             .AsParallel()
@@ -105,6 +110,8 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
         SearchOption directorySearchOption
     )
     {
+        ArgumentException.ThrowIfNullOrEmpty(executableName);
+
         ParallelQuery<FileInfo> results = directory
             .EnumerateFiles("*", directorySearchOption)
             .AsParallel()

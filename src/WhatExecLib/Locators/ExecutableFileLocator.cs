@@ -38,13 +38,9 @@ public class ExecutableFileLocator : IExecutableFileLocator
         SearchOption directorySearchOption
     )
     {
-#if NET8_0_OR_GREATER
         ArgumentException.ThrowIfNullOrEmpty(executableFileName);
         ArgumentNullException.ThrowIfNull(drive);
-#else
-        executableFileName = Ensure.NotNullOrEmpty(executableFileName);
-        drive = Ensure.NotNull(drive);
-#endif
+
         if (Path.IsPathRooted(executableFileName))
             return HandleRootedPath(executableFileName);
 
@@ -92,13 +88,9 @@ public class ExecutableFileLocator : IExecutableFileLocator
         if (Path.IsPathRooted(executableFileName))
             return HandleRootedPath(executableFileName);
 
-#if NET8_0_OR_GREATER
         ArgumentException.ThrowIfNullOrEmpty(executableFileName);
         ArgumentNullException.ThrowIfNull(directory);
-#else
-        executableFileName = Ensure.NotNullOrEmpty(executableFileName);
-        directory = Ensure.NotNull(directory);
-#endif
+
         FileInfo? result = directory
             .EnumerateFiles("*", directorySearchOption)
             .Where(file =>
@@ -125,11 +117,8 @@ public class ExecutableFileLocator : IExecutableFileLocator
     /// <returns></returns>
     public FileInfo? LocateExecutable(string executableFileName, SearchOption directorySearchOption)
     {
-#if NET8_0_OR_GREATER
         ArgumentException.ThrowIfNullOrEmpty(executableFileName);
-#else
-        executableFileName = Ensure.NotNullOrEmpty(executableFileName);
-#endif
+
         if (Path.IsPathRooted(executableFileName))
             return HandleRootedPath(executableFileName);
 

@@ -7,6 +7,7 @@
     file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,6 +52,8 @@ public class WhatExecutableResolver : IWhatExecutableResolver
     [SupportedOSPlatform("android")]
     public FileInfo ResolveExecutableFilePath(string inputFilePath)
     {
+        ArgumentException.ThrowIfNullOrEmpty(inputFilePath);
+
         try
         {
             FileInfo pathEnvFile = _pathExecutableResolver.ResolvePathEnvironmentExecutableFile(
