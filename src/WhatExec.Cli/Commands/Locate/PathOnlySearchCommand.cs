@@ -33,11 +33,8 @@ public class PathOnlySearchCommand : AsyncCommand<PathOnlySearchCommand.Settings
             {
                 List<FileInfo> output = new List<FileInfo>();
 
-                Stopwatch stopwatch = new();
-
                 foreach (string command in commands)
                 {
-                    stopwatch.Start();
                     bool found;
                     FileInfo? info;
 
