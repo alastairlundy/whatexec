@@ -16,11 +16,13 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
+    <PackageReleaseNotes>* Updated to Polyfill 9.3.0 from 9.1.0
+* Updated implementation to work with Abstractions Preview 2
+* Reduced technical debt and simplified implementation code</PackageReleaseNotes>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>1.0.0-preview.1</Version>
     <PolyArgumentExceptions>true</PolyArgumentExceptions>
+    <Version>1.0.0-preview.2</Version>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <IsTrimmable>true</IsTrimmable>
     <Description>WhatExecLib is a C# library that finds executable files in PATH Environment Variables, Directories or Drives.
