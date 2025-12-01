@@ -4,7 +4,7 @@ using ConsoleAppFramework;
 
 namespace WhatExecLite;
 
-public partial class CliCommands
+public class CliCommands
 {
     [Command("")]
     public int Run(
