@@ -65,17 +65,12 @@ public class ExecutableFileDetector : IExecutableFileDetector
             throw new FileNotFoundException();
 
         /*
-        if (OperatingSystem.IsWindows())
-        {
-            return DoesFileHaveExecutablePermissions(file);
-        }
         else if (OperatingSystem.IsLinux())
         {
 #pragma warning disable CA1416
             return DoesFileHaveExecutablePermissions(file)
                 &&
                 //   IsUnixElfFile(fullPath) ||
-                DoesFileHaveExecutableExtension(file);
 #pragma warning restore CA1416
         }
         if (IsBsdBased)
@@ -85,7 +80,6 @@ public class ExecutableFileDetector : IExecutableFileDetector
                 ||
                 //     IsUnixElfFile(file.FullName) ||
                 //    IsMachOFile(file.FullName) ||
-                DoesFileHaveExecutableExtension(file);
 #pragma warning restore CA1416
         }*/
 
