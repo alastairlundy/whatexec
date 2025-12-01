@@ -8,6 +8,8 @@
  */
 
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AlastairLundy.WhatExecLib.Abstractions.Locators;
 
@@ -29,6 +31,21 @@ public interface IExecutableFileLocator
     /// <summary>
     ///
     /// </summary>
+    /// <param name="drive"></param>
+    /// <param name="executableFileName"></param>
+    /// <param name="directorySearchOption"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<FileInfo?> LocateExecutableInDriveAsync(
+        DriveInfo drive,
+        string executableFileName,
+        SearchOption directorySearchOption,
+        CancellationToken cancellationToken
+    );
+
+    /// <summary>
+    ///
+    /// </summary>
     /// <param name="directory"></param>
     /// <param name="executableFileName"></param>
     /// <param name="directorySearchOption"></param>
@@ -39,6 +56,13 @@ public interface IExecutableFileLocator
         SearchOption directorySearchOption
     );
 
+    Task<FileInfo?> LocateExecutableInDirectoryAsync(
+        DirectoryInfo directory,
+        string executableFileName,
+        SearchOption directorySearchOption,
+        CancellationToken cancellationToken
+    );
+
     /// <summary>
     ///
     /// </summary>
@@ -46,4 +70,10 @@ public interface IExecutableFileLocator
     /// <param name="directorySearchOption"></param>
     /// <returns></returns>
     FileInfo? LocateExecutable(string executableFileName, SearchOption directorySearchOption);
+
+    Task<FileInfo?> LocateExecutableAsync(
+        string executableFileName,
+        SearchOption directorySearchOption,
+        CancellationToken cancellationToken
+    );
 }

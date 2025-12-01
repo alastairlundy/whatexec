@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
 
@@ -53,6 +55,26 @@ public class ExecutableFileLocator : IExecutableFileLocator
             .FirstOrDefault(file => file is not null);
 
         return result;
+    }
+
+    public async Task<FileInfo?> LocateExecutableInDriveAsync(
+        DriveInfo drive,
+        string executableFileName,
+        SearchOption directorySearchOption,
+        CancellationToken cancellationToken
+    )
+    {
+        ArgumentException.ThrowIfNullOrEmpty(executableFileName);
+        ArgumentNullException.ThrowIfNull(drive);
+
+        return await Task.Run(
+            () =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return LocateExecutableInDrive(drive, executableFileName, directorySearchOption);
+            },
+            cancellationToken
+        );
     }
 
     private FileInfo? HandleRootedPath(string executableFileName)
@@ -106,6 +128,30 @@ public class ExecutableFileLocator : IExecutableFileLocator
         return result;
     }
 
+    public async Task<FileInfo?> LocateExecutableInDirectoryAsync(
+        DirectoryInfo directory,
+        string executableFileName,
+        SearchOption directorySearchOption,
+        CancellationToken cancellationToken
+    )
+    {
+        ArgumentException.ThrowIfNullOrEmpty(executableFileName);
+        ArgumentNullException.ThrowIfNull(directory);
+
+        return await Task.Run(
+            () =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return LocateExecutableInDirectory(
+                    directory,
+                    executableFileName,
+                    directorySearchOption
+                );
+            },
+            cancellationToken
+        );
+    }
+
     /// <summary>
     ///
     /// </summary>
@@ -132,5 +178,23 @@ public class ExecutableFileLocator : IExecutableFileLocator
             .FirstOrDefault(file => file is not null);
 
         return result;
+    }
+
+    public async Task<FileInfo?> LocateExecutableAsync(
+        string executableFileName,
+        SearchOption directorySearchOption,
+        CancellationToken cancellationToken
+    )
+    {
+        ArgumentException.ThrowIfNullOrEmpty(executableFileName);
+
+        return await Task.Run(
+            () =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return LocateExecutable(executableFileName, directorySearchOption);
+            },
+            cancellationToken
+        );
     }
 }
