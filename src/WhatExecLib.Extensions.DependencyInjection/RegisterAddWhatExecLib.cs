@@ -41,6 +41,7 @@ public static class RegisterAddWhatExecLib
                     IExecutableFileInstancesLocator,
                     ExecutableFileInstancesLocator
                 >();
+                services.AddScoped<IExecutableFileLocator, ExecutableFileLocator>();
                 services.AddScoped<IMultiExecutableLocator, MultiExecutableLocator>();
                 services.TryAddScoped<IPathExecutableResolver, PathExecutableResolver>();
                 services.AddScoped<IWhatExecutableResolver, WhatExecutableResolver>();
@@ -51,6 +52,7 @@ public static class RegisterAddWhatExecLib
                     IExecutableFileInstancesLocator,
                     ExecutableFileInstancesLocator
                 >();
+                services.AddSingleton<IExecutableFileLocator, ExecutableFileLocator>();
                 services.AddSingleton<IMultiExecutableLocator, MultiExecutableLocator>();
                 services.TryAddSingleton<IPathExecutableResolver, PathExecutableResolver>();
                 services.AddSingleton<IWhatExecutableResolver, WhatExecutableResolver>();
@@ -61,6 +63,7 @@ public static class RegisterAddWhatExecLib
                     IExecutableFileInstancesLocator,
                     ExecutableFileInstancesLocator
                 >();
+                services.AddTransient<IExecutableFileLocator, ExecutableFileLocator>();
                 services.AddTransient<IMultiExecutableLocator, MultiExecutableLocator>();
                 services.TryAddTransient<IPathExecutableResolver, PathExecutableResolver>();
                 services.AddTransient<IWhatExecutableResolver, WhatExecutableResolver>();
