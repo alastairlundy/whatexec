@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.Versioning;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
+using AlastairLundy.WhatExecLib.Extensions;
 
 namespace AlastairLundy.WhatExecLib.Locators;
 
@@ -49,14 +50,9 @@ public class MultiExecutableLocator : IMultiExecutableLocator
         SearchOption directorySearchOption
     )
     {
-        ParallelQuery<FileInfo> results = directory
-            .EnumerateDirectories("*", directorySearchOption)
-            .AsParallel()
-            .SelectMany(dir =>
-            {
-                return dir.EnumerateFiles("*", directorySearchOption)
-                    .Where(file => _executableFileDetector.IsFileExecutable(file));
-            });
+        IEnumerable<FileInfo> results = directory
+            .EnumerateFiles("*", directorySearchOption)
+            .Where(file => _executableFileDetector.IsFileExecutable(file));
 
         return results;
     }
@@ -77,10 +73,11 @@ public class MultiExecutableLocator : IMultiExecutableLocator
         SearchOption directorySearchOption
     )
     {
-        ParallelQuery<FileInfo> results = driveInfo
+        IEnumerable<FileInfo> results = driveInfo
             .RootDirectory.EnumerateDirectories("*", directorySearchOption)
-            .AsParallel()
-            .SelectMany(dir => LocateAllExecutablesWithinDirectory(dir, directorySearchOption));
+            .PrioritizeLocations()
+            .SelectMany(dir => LocateAllExecutablesWithinDirectory(dir, directorySearchOption))
+            .AsParallel();
 
         return results;
     }
