@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.Versioning;
 using AlastairLundy.DotPrimitives.IO.Paths;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using Microsoft.Extensions.Caching.Memory;
@@ -90,6 +91,11 @@ public class MemoryCachedPathExecutableResolver
     /// </summary>
     /// <param name="inputFilePath"></param>
     /// <returns></returns>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public new FileInfo ResolvePathEnvironmentExecutableFile(string inputFilePath) =>
         ResolvePathEnvironmentExecutableFile(
             inputFilePath,
@@ -104,6 +110,11 @@ public class MemoryCachedPathExecutableResolver
     /// <param name="fileInfo"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public new bool TryResolvePathEnvironmentExecutableFile(
         string inputFilePath,
         out FileInfo? fileInfo
@@ -122,6 +133,11 @@ public class MemoryCachedPathExecutableResolver
     /// <param name="pathExtensionsCacheLifetime"></param>
     /// <param name="pathCacheLifetime"></param>
     /// <returns></returns>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public FileInfo ResolvePathEnvironmentExecutableFile(
         string inputFilePath,
         TimeSpan? pathCacheLifetime,
@@ -155,6 +171,11 @@ public class MemoryCachedPathExecutableResolver
     /// <param name="pathCacheLifetime"></param>
     /// <param name="fileInfo"></param>
     /// <returns></returns>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
     public bool TryResolvePathEnvironmentExecutableFile(
         string inputFilePath,
         TimeSpan? pathCacheLifetime,
