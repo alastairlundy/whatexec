@@ -14,6 +14,7 @@ using System.Linq;
 using System.Runtime.Versioning;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
+using AlastairLundy.WhatExecLib.Extensions;
 
 namespace AlastairLundy.WhatExecLib.Locators;
 
@@ -53,11 +54,11 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
 
         IEnumerable<DriveInfo> drives = DriveInfo.GetDrives().Where(x => x.IsReady);
 
-        ParallelQuery<FileInfo> result = drives
-            .AsParallel()
+        IEnumerable<FileInfo> result = drives
             .SelectMany(drive =>
                 LocateExecutableInstancesInDrive(drive, executableName, directorySearchOption)
-            );
+            )
+            .AsParallel();
 
         return result;
     }
@@ -82,12 +83,13 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     {
         ArgumentException.ThrowIfNullOrEmpty(executableName);
 
-        ParallelQuery<FileInfo> results = driveInfo
+        IEnumerable<FileInfo> results = driveInfo
             .RootDirectory.EnumerateDirectories("*", directorySearchOption)
-            .AsParallel()
+            .PrioritizeLocations()
             .SelectMany(dir =>
                 LocateExecutableInstancesInDirectory(dir, executableName, directorySearchOption)
-            );
+            )
+            .AsParallel();
 
         return results;
     }
@@ -114,11 +116,9 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
 
         IEnumerable<FileInfo> results = directory
             .EnumerateFiles("*", directorySearchOption)
-            .Where(f => File.Exists(f.FullName))
+            .Where(f => f.Exists)
             .Where(file => _executableFileDetector.IsFileExecutable(file))
-            .Where(file =>
-                file.Name.Equals(executableName) || file.FullName.Equals(executableName)
-            );
+            .Where(file => file.Name.Equals(executableName));
 
         return results;
     }

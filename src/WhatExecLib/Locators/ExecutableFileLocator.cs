@@ -13,8 +13,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AlastairLundy.DotExtensions.IO.Directories;
 using AlastairLundy.WhatExecLib.Abstractions.Detectors;
 using AlastairLundy.WhatExecLib.Abstractions.Locators;
+using AlastairLundy.WhatExecLib.Extensions;
 
 namespace AlastairLundy.WhatExecLib.Locators;
 
@@ -48,10 +50,12 @@ public class ExecutableFileLocator : IExecutableFileLocator
 
         FileInfo? result = drive
             .RootDirectory.EnumerateDirectories("*", directorySearchOption)
-            .AsParallel()
+            .Where(dir => dir.Exists && !dir.IsEmpty)
+            .PrioritizeLocations()
             .Select(directory =>
                 LocateExecutableInDirectory(directory, executableFileName, directorySearchOption)
             )
+            .AsParallel()
             .FirstOrDefault(file => file is not null);
 
         return result;
@@ -171,10 +175,10 @@ public class ExecutableFileLocator : IExecutableFileLocator
             .Where(drive => drive.IsReady);
 
         FileInfo? result = drives
-            .AsParallel()
             .Select(drive =>
                 LocateExecutableInDrive(drive, executableFileName, directorySearchOption)
             )
+            .AsParallel()
             .FirstOrDefault(file => file is not null);
 
         return result;
