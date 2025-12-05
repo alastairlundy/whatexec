@@ -48,7 +48,6 @@ public class ExecutableFileLocator : IExecutableFileLocator
             .Select(directory =>
                 LocateExecutableInDirectory(directory, executableFileName, directorySearchOption)
             )
-            .AsParallel()
             .FirstOrDefault(file => file is not null);
 
         return result;
