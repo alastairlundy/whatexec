@@ -41,8 +41,7 @@ public class ExecutableFileLocator : IExecutableFileLocator
             return HandleRootedPath(executableFileName);
 
         FileInfo? result = drive
-            .RootDirectory.EnumerateDirectories("*", directorySearchOption)
-            .Where(dir => dir.Exists && !dir.IsEmpty)
+            .RootDirectory.SafelyEnumerateDirectories("*", directorySearchOption)
             .PrioritizeLocations()
             .Select(directory =>
                 LocateExecutableInDirectory(directory, executableFileName, directorySearchOption)
@@ -108,19 +107,32 @@ public class ExecutableFileLocator : IExecutableFileLocator
         ArgumentException.ThrowIfNullOrEmpty(executableFileName);
         ArgumentNullException.ThrowIfNull(directory);
 
-        FileInfo? result = directory
-            .EnumerateFiles("*", directorySearchOption)
-            .Where(file =>
+        IEnumerable<FileInfo> files = directory.SafelyEnumerateFiles("*", directorySearchOption);
+
+        StringComparison stringComparison = OperatingSystem.IsWindows()
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
+
+        foreach (FileInfo file in files)
+        {
+            try
             {
-                StringComparison stringComparison = OperatingSystem.IsWindows()
-                    ? StringComparison.OrdinalIgnoreCase
-                    : StringComparison.Ordinal;
+                if (
+                    file.Exists
+                    && file.Name.Equals(executableFileName, stringComparison)
+                    && _executableFileDetector.IsFileExecutable(file)
+                )
+                {
+                    return file;
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+        }
 
-                return file.Exists && file.Name.Equals(executableFileName, stringComparison);
-            })
-            .FirstOrDefault(file => _executableFileDetector.IsFileExecutable(file));
-
-        return result;
+        return null;
     }
 
     public async Task<FileInfo?> LocateExecutableInDirectoryAsync(

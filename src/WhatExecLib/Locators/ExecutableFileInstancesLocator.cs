@@ -75,7 +75,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
         ArgumentException.ThrowIfNullOrEmpty(executableName);
 
         IEnumerable<FileInfo> results = driveInfo
-            .RootDirectory.EnumerateDirectories("*", directorySearchOption)
+            .RootDirectory.SafelyEnumerateDirectories("*", directorySearchOption)
             .PrioritizeLocations()
             .SelectMany(dir =>
                 LocateExecutableInstancesInDirectory(dir, executableName, directorySearchOption)
@@ -106,7 +106,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
         ArgumentException.ThrowIfNullOrEmpty(executableName);
 
         IEnumerable<FileInfo> results = directory
-            .EnumerateFiles("*", directorySearchOption)
+            .SafelyEnumerateFiles("*", directorySearchOption)
             .Where(f => f.Exists)
             .Where(file => _executableFileDetector.IsFileExecutable(file))
             .Where(file => file.Name.Equals(executableName));

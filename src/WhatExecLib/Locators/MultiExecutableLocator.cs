@@ -43,7 +43,7 @@ public class MultiExecutableLocator : IMultiExecutableLocator
     )
     {
         IEnumerable<FileInfo> results = directory
-            .EnumerateFiles("*", directorySearchOption)
+            .SafelyEnumerateFiles("*", directorySearchOption)
             .Where(file => _executableFileDetector.IsFileExecutable(file));
 
         return results;
@@ -66,7 +66,7 @@ public class MultiExecutableLocator : IMultiExecutableLocator
     )
     {
         IEnumerable<FileInfo> results = driveInfo
-            .RootDirectory.EnumerateDirectories("*", directorySearchOption)
+            .RootDirectory.SafelyEnumerateDirectories("*", directorySearchOption)
             .PrioritizeLocations()
             .SelectMany(dir => LocateAllExecutablesWithinDirectory(dir, directorySearchOption))
             .AsParallel();
