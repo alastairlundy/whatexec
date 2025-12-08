@@ -32,7 +32,7 @@ namespace WhatExec.Cli.Localizations {
             }
         }
         
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        [EditorBrowsable(System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
