@@ -43,6 +43,7 @@ public class ExecutableFileLocator : IExecutableFileLocator
         FileInfo? result = drive
             .RootDirectory.SafelyEnumerateDirectories("*", directorySearchOption)
             .PrioritizeLocations()
+            .Distinct()
             .Select(directory =>
                 LocateExecutableInDirectory(directory, executableFileName, directorySearchOption)
             )
