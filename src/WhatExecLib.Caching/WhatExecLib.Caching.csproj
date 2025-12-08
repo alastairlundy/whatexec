@@ -8,6 +8,7 @@
     <Authors>Alastair Lundy</Authors>
     <Company>AlastairLundy.WhatExecLib.Caching</Company>
     <Product>AlastairLundy.WhatExecLib.Caching</Product>
+    <PolyArgumentExceptions>true</PolyArgumentExceptions>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\WhatExecLib\WhatExecLib.csproj" />
