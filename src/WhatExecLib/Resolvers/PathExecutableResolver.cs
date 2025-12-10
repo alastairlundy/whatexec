@@ -21,7 +21,6 @@ public class PathExecutableResolver : IPathExecutableResolver
 {
     private readonly IExecutableFileDetector _executableFileDetector;
     protected bool IsUnix { get; }
-    protected bool IsWindows { get; }
 
     /// <summary>
     ///
@@ -36,9 +35,9 @@ public class PathExecutableResolver : IPathExecutableResolver
             || OperatingSystem.IsMacCatalyst()
             || OperatingSystem.IsFreeBSD()
             || OperatingSystem.IsAndroid();
-        IsWindows = OperatingSystem.IsWindows();
     }
 
+    #region Helper Methods
     [SupportedOSPlatform("windows")]
     [SupportedOSPlatform("macos")]
     [SupportedOSPlatform("linux")]
@@ -60,7 +59,6 @@ public class PathExecutableResolver : IPathExecutableResolver
                     return true;
                 }
             }
-            // ReSharper disable once RedundantIfElseBlock
             else
             {
                 if (File.Exists(fullFilePath))
@@ -78,116 +76,6 @@ public class PathExecutableResolver : IPathExecutableResolver
             fileInfo = null;
             return false;
         }
-    }
-
-    /// <summary>
-    /// Resolves a file from the system's PATH environment variable using the provided file name.
-    /// </summary>
-    /// <param name="inputFilePath">The name of the file to resolve, including optional relative or absolute paths.</param>
-    /// <returns>A <see cref="FileInfo"/> object representing the resolved file.</returns>
-    /// <exception cref="FileNotFoundException">Thrown if the file could not be found in the specified locations.</exception>
-    /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is unsupported.</exception>
-    /// <exception cref="InvalidOperationException">Thrown if an invalid operation occurs during file resolution, such as PATH not being able to be resolved.</exception>
-    [SupportedOSPlatform("windows")]
-    [SupportedOSPlatform("macos")]
-    [SupportedOSPlatform("linux")]
-    [SupportedOSPlatform("freebsd")]
-    [SupportedOSPlatform("android")]
-    public FileInfo ResolvePathEnvironmentExecutableFile(string inputFilePath)
-    {
-        bool result = TryResolvePathEnvironmentExecutableFile(
-            inputFilePath,
-            out FileInfo? fileInfo
-        );
-
-        bool fileDoesntExist = !File.Exists(fileInfo?.FullName);
-
-        if (!result || fileInfo is null || fileDoesntExist)
-            throw new FileNotFoundException($"Could not find file: {inputFilePath}");
-
-        return fileInfo;
-    }
-
-    /// <summary>
-    /// Attempts to resolve a file from the system's PATH environment variable using the provided file name.
-    /// </summary>
-    /// <param name="inputFilePath">The name of the file to resolve, including optional relative or absolute paths.</param>
-    /// <param name="fileInfo">When this method returns, contains the resolved <see cref="FileInfo"/> object if the resolution is successful; otherwise, null.</param>
-    /// <returns>True if the file is successfully resolved; otherwise, false.</returns>
-    /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is unsupported.</exception>
-    [SupportedOSPlatform("windows")]
-    [SupportedOSPlatform("macos")]
-    [SupportedOSPlatform("linux")]
-    [SupportedOSPlatform("freebsd")]
-    [SupportedOSPlatform("android")]
-    public bool TryResolvePathEnvironmentExecutableFile(
-        string inputFilePath,
-        out FileInfo? fileInfo
-    )
-    {
-#if NET8_0_OR_GREATER
-        ArgumentException.ThrowIfNullOrEmpty(inputFilePath, nameof(inputFilePath));
-#endif
-
-        if (
-            Path.IsPathRooted(inputFilePath)
-            || inputFilePath.Contains(Path.DirectorySeparatorChar)
-            || inputFilePath.Contains(Path.AltDirectorySeparatorChar)
-        )
-        {
-            if (File.Exists(inputFilePath))
-            {
-                if (ExecutableFileIsValid(inputFilePath, out FileInfo? info) && info is not null)
-                {
-                    fileInfo = info;
-                    return true;
-                }
-            }
-
-            fileInfo = null;
-            return false;
-        }
-
-        bool fileHasExtension = Path.GetExtension(inputFilePath) != string.Empty;
-
-        string[] pathExtensions = PathEnvironmentVariable.GetPathFileExtensions();
-        string[] pathContents;
-
-        try
-        {
-            pathContents =
-                PathEnvironmentVariable.GetDirectories()
-                ?? throw new InvalidOperationException("PATH Variable could not be found.");
-        }
-        catch (InvalidOperationException)
-        {
-            fileInfo = null;
-            return false;
-        }
-
-        foreach (string pathEntry in pathContents)
-        {
-            if (!fileHasExtension)
-            {
-                pathExtensions = [""];
-            }
-
-            foreach (string pathExtension in pathExtensions)
-            {
-                bool result = CheckFileExists(
-                    inputFilePath,
-                    out fileInfo,
-                    pathEntry,
-                    pathExtension
-                );
-
-                if (result)
-                    return result;
-            }
-        }
-
-        fileInfo = null;
-        return false;
     }
 
     [SupportedOSPlatform("windows")]
@@ -214,6 +102,213 @@ public class PathExecutableResolver : IPathExecutableResolver
         }
 
         fileInfo = null;
+        return false;
+    }
+    #endregion
+
+    /// <summary>
+    /// Resolves a file from the system's PATH environment variable using the provided file name.
+    /// </summary>
+    /// <param name="inputFilePath">The name of the file to resolve, including optional relative or absolute paths.</param>
+    /// <returns>A <see cref="FileInfo"/> object representing the resolved file.</returns>
+    /// <exception cref="FileNotFoundException">Thrown if the file could not be found in the specified locations.</exception>
+    /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is unsupported.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if an invalid operation occurs during file resolution, such as PATH not being able to be resolved.</exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
+    public FileInfo ResolveExecutableFile(string inputFilePath) =>
+        ResolveExecutableFiles(inputFilePath).First();
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="inputFilePaths"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    /// <exception cref="FileNotFoundException"></exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
+    public FileInfo[] ResolveExecutableFiles(params string[] inputFilePaths)
+    {
+        ArgumentNullException.ThrowIfNull(inputFilePaths);
+
+        string[] pathExtensions = PathEnvironmentVariable.GetPathFileExtensions();
+        string[] pathContents =
+            PathEnvironmentVariable.GetDirectories()
+            ?? throw new InvalidOperationException("PATH Variable could not be found.");
+
+        bool foundAny = false;
+        List<FileInfo> output = new();
+
+        foreach (string inputFilePath in inputFilePaths)
+        {
+            if (
+                Path.IsPathRooted(inputFilePath)
+                || inputFilePath.Contains(Path.DirectorySeparatorChar)
+                || inputFilePath.Contains(Path.AltDirectorySeparatorChar)
+            )
+            {
+                if (File.Exists(inputFilePath))
+                {
+                    if (
+                        ExecutableFileIsValid(inputFilePath, out FileInfo? info) && info is not null
+                    )
+                    {
+                        output.Add(info);
+                        foundAny = true;
+                    }
+                }
+            }
+
+            bool fileHasExtension = Path.GetExtension(inputFilePath) != string.Empty;
+
+            foreach (string pathEntry in pathContents)
+            {
+                if (!fileHasExtension)
+                {
+                    pathExtensions = [""];
+                }
+
+                foreach (string pathExtension in pathExtensions)
+                {
+                    bool result = CheckFileExists(
+                        inputFilePath,
+                        out FileInfo? fileInfo,
+                        pathEntry,
+                        pathExtension
+                    );
+
+                    if (result && fileInfo is not null)
+                    {
+                        foundAny = true;
+                        output.Add(fileInfo);
+                    }
+                }
+            }
+        }
+
+        return foundAny
+            ? output.ToArray()
+            : throw new FileNotFoundException(
+                $"Could not find file(s): {string.Join(",", inputFilePaths)}"
+            );
+    }
+
+    /// <summary>
+    /// Attempts to resolve a file from the system's PATH environment variable using the provided file name.
+    /// </summary>
+    /// <param name="inputFilePath">The name of the file to resolve, including optional relative or absolute paths.</param>
+    /// <param name="fileInfo">When this method returns, contains the resolved <see cref="FileInfo"/> object if the resolution is successful; otherwise, null.</param>
+    /// <returns>True if the file is successfully resolved; otherwise, false.</returns>
+    /// <exception cref="PlatformNotSupportedException">Thrown if the current platform is unsupported.</exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
+    public bool TryResolveExecutableFile(string inputFilePath, out FileInfo? fileInfo)
+    {
+        bool success = TryResolveExecutableFiles([inputFilePath], out FileInfo[]? fileInfos);
+
+        fileInfo = fileInfos?.FirstOrDefault() ?? null;
+
+        return success;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="inputFilePaths"></param>
+    /// <param name="fileInfos"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("freebsd")]
+    [SupportedOSPlatform("android")]
+    public bool TryResolveExecutableFiles(string[] inputFilePaths, out FileInfo[]? fileInfos)
+    {
+        ArgumentNullException.ThrowIfNull(inputFilePaths);
+
+        string[] pathExtensions = PathEnvironmentVariable.GetPathFileExtensions();
+        string[] pathContents;
+
+        try
+        {
+            pathContents =
+                PathEnvironmentVariable.GetDirectories()
+                ?? throw new InvalidOperationException("PATH Variable could not be found.");
+        }
+        catch (InvalidOperationException)
+        {
+            fileInfos = null;
+            return false;
+        }
+
+        bool foundAny = false;
+        List<FileInfo> output = new();
+
+        foreach (string inputFilePath in inputFilePaths)
+        {
+            if (
+                Path.IsPathRooted(inputFilePath)
+                || inputFilePath.Contains(Path.DirectorySeparatorChar)
+                || inputFilePath.Contains(Path.AltDirectorySeparatorChar)
+            )
+            {
+                if (File.Exists(inputFilePath))
+                {
+                    if (
+                        ExecutableFileIsValid(inputFilePath, out FileInfo? info) && info is not null
+                    )
+                    {
+                        output.Add(info);
+                        foundAny = true;
+                    }
+                }
+            }
+
+            bool fileHasExtension = Path.GetExtension(inputFilePath) != string.Empty;
+
+            foreach (string pathEntry in pathContents)
+            {
+                if (!fileHasExtension)
+                {
+                    pathExtensions = [""];
+                }
+
+                foreach (string pathExtension in pathExtensions)
+                {
+                    bool result = CheckFileExists(
+                        inputFilePath,
+                        out FileInfo? fileInfo,
+                        pathEntry,
+                        pathExtension
+                    );
+
+                    if (result && fileInfo is not null)
+                    {
+                        foundAny = true;
+                        output.Add(fileInfo);
+                    }
+                }
+            }
+        }
+
+        if (foundAny)
+        {
+            fileInfos = output.ToArray();
+            return true;
+        }
+
+        fileInfos = null;
         return false;
     }
 }

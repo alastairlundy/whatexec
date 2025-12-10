@@ -93,8 +93,8 @@ public class MemoryCachedPathExecutableResolver
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public new FileInfo ResolvePathEnvironmentExecutableFile(string inputFilePath) =>
-        ResolvePathEnvironmentExecutableFile(
+    public new FileInfo ResolveExecutableFile(string inputFilePath) =>
+        ResolveExecutableFile(
             inputFilePath,
             DefaultPathCacheLifespan,
             DefaultPathExtensionsCacheLifespan
@@ -112,11 +112,8 @@ public class MemoryCachedPathExecutableResolver
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public new bool TryResolvePathEnvironmentExecutableFile(
-        string inputFilePath,
-        out FileInfo? fileInfo
-    ) =>
-        TryResolvePathEnvironmentExecutableFile(
+    public new bool TryResolveExecutableFile(string inputFilePath, out FileInfo? fileInfo) =>
+        TryResolveExecutableFile(
             inputFilePath,
             DefaultPathCacheLifespan,
             DefaultPathExtensionsCacheLifespan,
@@ -135,7 +132,7 @@ public class MemoryCachedPathExecutableResolver
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public FileInfo ResolvePathEnvironmentExecutableFile(
+    public FileInfo ResolveExecutableFile(
         string inputFilePath,
         TimeSpan? pathCacheLifetime,
         TimeSpan? pathExtensionsCacheLifetime
@@ -144,7 +141,7 @@ public class MemoryCachedPathExecutableResolver
         pathCacheLifetime ??= DefaultPathCacheLifespan;
         pathExtensionsCacheLifetime ??= DefaultPathExtensionsCacheLifespan;
 
-        bool result = TryResolvePathEnvironmentExecutableFile(
+        bool result = TryResolveExecutableFile(
             inputFilePath,
             pathCacheLifetime,
             pathExtensionsCacheLifetime,
@@ -173,16 +170,15 @@ public class MemoryCachedPathExecutableResolver
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public bool TryResolvePathEnvironmentExecutableFile(
+    public bool TryResolveExecutableFile(
         string inputFilePath,
         TimeSpan? pathCacheLifetime,
         TimeSpan? pathExtensionsCacheLifetime,
         out FileInfo? fileInfo
     )
     {
-#if NET8_0_OR_GREATER
         ArgumentException.ThrowIfNullOrEmpty(inputFilePath);
-#endif
+
         pathCacheLifetime ??= DefaultPathCacheLifespan;
         pathExtensionsCacheLifetime ??= DefaultPathExtensionsCacheLifespan;
 

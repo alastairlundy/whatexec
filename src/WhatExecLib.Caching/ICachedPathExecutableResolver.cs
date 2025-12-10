@@ -23,7 +23,7 @@ public interface ICachedPathExecutableResolver : IPathExecutableResolver
     /// <param name="pathExtensionsCacheLifetime"></param>
     /// <param name="pathCacheLifetime"></param>
     /// <returns></returns>
-    FileInfo ResolvePathEnvironmentExecutableFile(
+    FileInfo ResolveExecutableFile(
         string inputFilePath,
         TimeSpan? pathExtensionsCacheLifetime,
         TimeSpan? pathCacheLifetime
@@ -37,7 +37,7 @@ public interface ICachedPathExecutableResolver : IPathExecutableResolver
     /// <param name="pathCacheLifetime"></param>
     /// <param name="fileInfo"></param>
     /// <returns></returns>
-    bool TryResolvePathEnvironmentExecutableFile(
+    bool TryResolveExecutableFile(
         string inputFilePath,
         TimeSpan? pathExtensionsCacheLifetime,
         TimeSpan? pathCacheLifetime,
