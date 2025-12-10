@@ -2,9 +2,11 @@ namespace WhatExecLib.Extensions;
 
 public static class PrioritizeLocationsExtensions
 {
-    private static int ComputeDirectoryPriorityScore(DirectoryInfo directory)
+    private static int ComputeDirectoryPriorityScore(FileInfo fileInfo)
     {
-        string dirPathName = directory.FullName.ToLower();
+        string dirPathName =
+            (fileInfo.DirectoryName?.ToLower() ?? fileInfo.Directory?.Name)
+            ?? fileInfo.FullName.Split(Path.DirectorySeparatorChar)[^1];
 
         if (dirPathName.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.Programs)))
             return 0;
@@ -51,10 +53,8 @@ public static class PrioritizeLocationsExtensions
         return 10;
     }
 
-    internal static IEnumerable<DirectoryInfo> PrioritizeLocations(
-        this IEnumerable<DirectoryInfo> directories
-    )
+    internal static IEnumerable<FileInfo> PrioritizeLocations(this IEnumerable<FileInfo> files)
     {
-        return directories.OrderBy(x => ComputeDirectoryPriorityScore(x));
+        return files.OrderBy(x => ComputeDirectoryPriorityScore(x));
     }
 }
