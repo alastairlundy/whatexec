@@ -56,7 +56,7 @@ public class CliCommands
         string[] commands
     )
     {
-        bool foundAny = pathExecutableResolver.TryResolveExecutableFiles(
+        bool foundAny = pathExecutableResolver.TryResolveExecutables(
             commands,
             out FileInfo[]? files
         );

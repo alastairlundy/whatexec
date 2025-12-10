@@ -37,7 +37,7 @@ public class MemoryCachedPathExecutableResolver
         IExecutableFileDetector executableFileDetector,
         IMemoryCache cache
     )
-        : base(executableFileDetector)
+        : base()
     {
         _cache = cache;
     }
@@ -48,7 +48,7 @@ public class MemoryCachedPathExecutableResolver
         TimeSpan defaultPathCacheLifespan,
         TimeSpan defaultPathExtensionsCacheLifespan
     )
-        : base(executableFileDetector)
+        : base()
     {
         _cache = cache;
         DefaultPathCacheLifespan = defaultPathCacheLifespan;
@@ -93,7 +93,7 @@ public class MemoryCachedPathExecutableResolver
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public new FileInfo ResolveExecutableFile(string inputFilePath) =>
+    public new FileInfo GetResolvedExecutable(string inputFilePath) =>
         ResolveExecutableFile(
             inputFilePath,
             DefaultPathCacheLifespan,
@@ -112,7 +112,7 @@ public class MemoryCachedPathExecutableResolver
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("freebsd")]
     [SupportedOSPlatform("android")]
-    public new bool TryResolveExecutableFile(string inputFilePath, out FileInfo? fileInfo) =>
+    public new bool TryResolveExecutable(string inputFilePath, out FileInfo? fileInfo) =>
         TryResolveExecutableFile(
             inputFilePath,
             DefaultPathCacheLifespan,

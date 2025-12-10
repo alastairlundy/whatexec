@@ -46,7 +46,7 @@ public class FindCommand
         Description = "Find all instances of the specified Commands and/or Executable Files"
     )]
     [DefaultValue(false)]
-    public bool LocaleAllInstances { get; set; } = false;
+    public bool LocaleAllInstances { get; set; }
 
     [CliOption(
         Name = "--limit",
@@ -58,7 +58,7 @@ public class FindCommand
 
     [CliOption(Description = "Enable interactivity.", Alias = "-i", Name = "--interactive")]
     [DefaultValue(false)]
-    public bool Interactive { get; set; } = false;
+    public bool Interactive { get; set; }
 
     public int Run()
     {
@@ -119,7 +119,7 @@ public class FindCommand
         }
         else
         {
-            Task<KeyValuePair<string, string>[]?> task = TrySearchSystem_DoNotLocateAll(
+            Task<KeyValuePair<string, string>[]> task = TrySearchSystem_DoNotLocateAll(
                 commandsLeftToLookFor
             );
             task.Wait();
@@ -173,7 +173,7 @@ public class FindCommand
 
         List<KeyValuePair<string, string>> output = new(capacity: Commands.Length);
 
-        bool success = _pathExecutableResolver.TryResolveExecutableFiles(
+        bool success = _pathExecutableResolver.TryResolveExecutables(
             Commands,
             out FileInfo[]? fileInfos
         );
@@ -196,7 +196,7 @@ public class FindCommand
         return output.Count > 0;
     }
 
-    private async Task<KeyValuePair<string, string>[]?> TrySearchSystem_DoNotLocateAll(
+    private async Task<KeyValuePair<string, string>[]> TrySearchSystem_DoNotLocateAll(
         string[] commandLeftToLookFor
     )
     {
@@ -226,19 +226,20 @@ public class FindCommand
         return output.ToArray();
     }
 
-    private KeyValuePair<string, string>[]? TrySearchSystem_LocateAllInstances(
-        string[] commandLeftToLookFor
+    private KeyValuePair<string, string>[] TrySearchSystem_LocateAllInstances(
+        string[] commandsLeftToLookFor
     )
     {
         List<KeyValuePair<string, string>> output = new();
 
-        foreach (string command in commandLeftToLookFor)
+        foreach (string command in commandsLeftToLookFor)
         {
             Console.WriteLine($"Looking for {command}");
 
-            IEnumerable<FileInfo> info = _executableFileInstancesLocator
-                .LocateExecutableInstances(command, SearchOption.AllDirectories)
-                .AsParallel();
+            IEnumerable<FileInfo> info = _executableFileInstancesLocator.LocateExecutableInstances(
+                command,
+                SearchOption.AllDirectories
+            );
 
             foreach (FileInfo file in info)
             {
