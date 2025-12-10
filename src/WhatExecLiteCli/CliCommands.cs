@@ -38,7 +38,7 @@ public class CliCommands
         catch (Exception e)
         {
             Console.Error.WriteLine(
-                "We ran into a problem. Here's the Exception details in case you need it: "
+                "We ran into a problem. Here are the Exception details in case you need it: "
             );
             Console.Error.WriteLine(e.Message);
 
