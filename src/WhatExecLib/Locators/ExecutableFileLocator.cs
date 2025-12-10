@@ -40,14 +40,33 @@ public class ExecutableFileLocator : IExecutableFileLocator
         if (Path.IsPathRooted(executableFileName))
             return HandleRootedPath(executableFileName);
 
-        FileInfo? result = drive
-            .RootDirectory.SafelyEnumerateDirectories("*", directorySearchOption)
-            .PrioritizeLocations()
-            .Distinct()
-            .Select(directory =>
-                LocateExecutableInDirectory(directory, executableFileName, directorySearchOption)
+        StringComparison stringComparison = OperatingSystem.IsWindows()
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
+
+        IEnumerable<string> searchPatterns = executableFileName.GetSearchPatterns();
+
+        FileInfo? result = searchPatterns
+            .SelectMany(sp =>
+                drive.RootDirectory.SafelyEnumerateFiles(sp, SearchOption.AllDirectories)
             )
-            .FirstOrDefault(file => file is not null);
+            .PrioritizeLocations()
+            .FirstOrDefault(f =>
+            {
+                Console.WriteLine($"Searching file: {f.FullName}");
+
+                try
+                {
+                    return f.Exists
+                        && f.Name.Equals(executableFileName, stringComparison)
+                        && _executableFileDetector.IsFileExecutable(f);
+                }
+                catch
+                {
+                    // Ignore per-file errors and continue scanning
+                    return false;
+                }
+            });
 
         return result;
     }
@@ -116,32 +135,23 @@ public class ExecutableFileLocator : IExecutableFileLocator
         ArgumentException.ThrowIfNullOrEmpty(executableFileName);
         ArgumentNullException.ThrowIfNull(directory);
 
-        IEnumerable<FileInfo> files = directory.SafelyEnumerateFiles("*", directorySearchOption);
+        IEnumerable<string> searchPatterns = executableFileName.GetSearchPatterns();
 
         StringComparison stringComparison = OperatingSystem.IsWindows()
             ? StringComparison.OrdinalIgnoreCase
             : StringComparison.Ordinal;
 
-        foreach (FileInfo file in files)
-        {
-            try
-            {
-                if (
-                    file.Exists
-                    && file.Name.Equals(executableFileName, stringComparison)
-                    && _executableFileDetector.IsFileExecutable(file)
-                )
-                {
-                    return file;
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-        }
+        FileInfo? result = searchPatterns
+            .SelectMany(sp => directory.SafelyEnumerateFiles(sp, SearchOption.AllDirectories))
+            .PrioritizeLocations()
+            .Where(f => f.Exists)
+            .FirstOrDefault(file =>
+                file.Exists
+                && file.Name.Equals(executableFileName, stringComparison)
+                && _executableFileDetector.IsFileExecutable(file)
+            );
 
-        return null;
+        return result;
     }
 
     /// <summary>
@@ -189,19 +199,17 @@ public class ExecutableFileLocator : IExecutableFileLocator
         if (Path.IsPathRooted(executableFileName))
             return HandleRootedPath(executableFileName);
 
-        IEnumerable<DriveInfo> drives = Environment
-            .GetLogicalDrives()
-            .Select(d => new DriveInfo(d))
-            .Where(drive => drive.IsReady);
+        Console.WriteLine($"Found drives: {string.Join(",", DriveDetector.EnumerateDrives())}");
 
-        FileInfo? result = drives
-            .Select(drive =>
-                LocateExecutableInDrive(drive, executableFileName, directorySearchOption)
-            )
-            .AsParallel()
-            .FirstOrDefault(file => file is not null);
+        IEnumerable<DriveInfo> drives = DriveDetector.EnumerateDrives();
 
-        return result;
+        return drives
+            .Select(d =>
+            {
+                Console.WriteLine($"Searching Drive: {d.VolumeLabel}");
+                return LocateExecutableInDrive(d, executableFileName, directorySearchOption);
+            })
+            .FirstOrDefault(x => x is not null);
     }
 
     /// <summary>

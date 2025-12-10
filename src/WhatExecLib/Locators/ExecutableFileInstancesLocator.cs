@@ -43,7 +43,7 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     {
         ArgumentException.ThrowIfNullOrEmpty(executableName);
 
-        IEnumerable<DriveInfo> drives = DriveInfo.GetDrives().Where(x => x.IsReady);
+        IEnumerable<DriveInfo> drives = DriveDetector.EnumerateDrives();
 
         IEnumerable<FileInfo> result = drives
             .SelectMany(drive =>
@@ -74,13 +74,19 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     {
         ArgumentException.ThrowIfNullOrEmpty(executableName);
 
-        IEnumerable<FileInfo> results = driveInfo
-            .RootDirectory.SafelyEnumerateDirectories("*", directorySearchOption)
-            .PrioritizeLocations()
-            .SelectMany(dir =>
-                LocateExecutableInstancesInDirectory(dir, executableName, directorySearchOption)
+        IEnumerable<string> searchPatterns = executableName.GetSearchPatterns();
+
+        IEnumerable<FileInfo> results = searchPatterns
+            .SelectMany(sp =>
+                driveInfo.RootDirectory.SafelyEnumerateFiles(sp, directorySearchOption)
             )
-            .AsParallel();
+            .PrioritizeLocations()
+            .Where(f =>
+                f is not null
+                && f.Exists
+                && _executableFileDetector.IsFileExecutable(f)
+                && f.Name.Equals(executableName)
+            );
 
         return results;
     }
@@ -105,8 +111,11 @@ public class ExecutableFileInstancesLocator : IExecutableFileInstancesLocator
     {
         ArgumentException.ThrowIfNullOrEmpty(executableName);
 
-        IEnumerable<FileInfo> results = directory
-            .SafelyEnumerateFiles("*", directorySearchOption)
+        IEnumerable<string> searchPatterns = executableName.GetSearchPatterns();
+
+        IEnumerable<FileInfo> results = searchPatterns
+            .SelectMany(sp => directory.SafelyEnumerateFiles(sp, directorySearchOption))
+            .PrioritizeLocations()
             .Where(f => f.Exists)
             .Where(file => _executableFileDetector.IsFileExecutable(file))
             .Where(file => file.Name.Equals(executableName));
